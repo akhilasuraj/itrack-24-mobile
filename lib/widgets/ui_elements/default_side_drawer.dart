@@ -14,35 +14,37 @@ class DefaultSideDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModelDescendant(
       builder: (BuildContext context, Widget child, MainModel model) {
-        return Drawer(
-          child: ListView(
-            children: <Widget>[
-              UserAccountsDrawerHeader(
-                accountName:
-                    Text('${model.user.firstName} ${model.user.lastName}'),
-                accountEmail: Text(model.user.email),
-                currentAccountPicture: GestureDetector(
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(_currentProfPicUrl),
-                  ),
+        return (model.user != null)
+            ? Drawer(
+                child: ListView(
+                  children: <Widget>[
+                    UserAccountsDrawerHeader(
+                      accountName: Text(
+                          '${model.user.firstName} ${model.user.lastName}'),
+                      accountEmail: Text(model.user.email),
+                      currentAccountPicture: GestureDetector(
+                        child: CircleAvatar(
+                          backgroundImage: NetworkImage(_currentProfPicUrl),
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(_backgroundImageUrl),
+                        ),
+                      ),
+                    ),
+                    ListTile(
+                      title: Text('Settings'),
+                      leading: Icon(Icons.settings),
+                      onTap: () {},
+                    ),
+                    Divider(),
+                    LogoutListTile(),
+                  ],
                 ),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: NetworkImage(_backgroundImageUrl),
-                  ),
-                ),
-              ),
-              ListTile(
-                title: Text('Settings'),
-                leading: Icon(Icons.settings),
-                onTap: () {},
-              ),
-              Divider(),
-              LogoutListTile(),
-            ],
-          ),
-        );
+              )
+            : Container();
       },
     );
   }

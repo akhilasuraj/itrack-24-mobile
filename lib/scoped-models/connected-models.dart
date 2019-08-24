@@ -71,11 +71,13 @@ mixin UserModel on ConnectedModel {
         token: responseData['token'],
         userId: responseData['userId'],
       );
+      _userSubject.add(true);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('firstName', responseData['firstName']);
       prefs.setString('lastName', responseData['lastName']);
       prefs.setInt('userId', responseData['userId']);
       prefs.setString('token', responseData['token']);
+      prefs.setString('email', formData['email']);
     } else if (responseData['error'] == 'INVALID_PASSWORD') {
       message = 'Invalid password';
     } else if (responseData['error'] == 'USER_DOES_NOT_EXIST') {
@@ -111,8 +113,8 @@ mixin UserModel on ConnectedModel {
     prefs.remove('userId');
     prefs.remove('email');
     prefs.remove('token');
+    _userSubject.add(false);
     _authenticatedUser = null;
-
     notifyListeners();
   }
 }

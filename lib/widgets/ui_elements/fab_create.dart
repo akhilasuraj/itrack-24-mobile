@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class FancyFab extends StatefulWidget {
+class FabCreate extends StatefulWidget {
   @override
-  _FancyFabState createState() => _FancyFabState();
+  _FabCreateState createState() => _FabCreateState();
 }
 
-class _FancyFabState extends State<FancyFab>
+class _FabCreateState extends State<FabCreate>
     with SingleTickerProviderStateMixin {
   bool isOpened = false;
   AnimationController _animationController;

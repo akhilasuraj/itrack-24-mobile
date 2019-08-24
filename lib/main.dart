@@ -43,12 +43,10 @@ class _MyAppState extends State<MyApp> {
           buttonColor: Colors.deepOrange,
         ),
         routes: {
-          '/': _isAuthenticated
-              ? (BuildContext context) => ComplaintsPage()
-              : (BuildContext context) => AuthPage(),
-          '/complaints': _isAuthenticated
-              ? (BuildContext context) => ComplaintsPage()
-              : (BuildContext context) => AuthPage(),
+          '/': (BuildContext context) =>
+              _isAuthenticated ? ComplaintsPage() : AuthPage(),
+          '/complaints': (BuildContext context) =>
+              _isAuthenticated ? ComplaintsPage() : AuthPage(),
         },
       ),
     );

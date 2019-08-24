@@ -12,7 +12,7 @@ class ComplaintsPage extends StatelessWidget {
         title: Text('Complaints'),
       ),
       body: Container(),
-      floatingActionButton: FancyFab(),
+      floatingActionButton: FabCreate(),
     );
   }
 }
