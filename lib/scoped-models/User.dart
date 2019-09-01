@@ -8,26 +8,16 @@ import 'dart:async';
 
 import '../models/auth.dart';
 import '../models/user.dart';
+import './utility.dart';
 
-mixin ConnectedModel on Model {
-  final String _hostUrl = 'http://192.168.8.8:3000';
-
+mixin UserModel on Model, UtilityModel {
   User _authenticatedUser;
-  bool _isLoading = false;
-}
-
-mixin UtilityModel on ConnectedModel {
-  bool get isLoading {
-    return _isLoading;
-  }
-}
-
-mixin UserModel on ConnectedModel {
-  PublishSubject<bool> _userSubject = PublishSubject();
 
   User get user {
     return _authenticatedUser;
   }
+
+  PublishSubject<bool> _userSubject = PublishSubject();
 
   PublishSubject<bool> get userSubject {
     return _userSubject;
@@ -35,7 +25,7 @@ mixin UserModel on ConnectedModel {
 
   Future<Map<String, dynamic>> authenticate(Map<String, dynamic> formData,
       [AuthMode mode = AuthMode.Login]) async {
-    _isLoading = true;
+    isLoading = true;
     notifyListeners();
     http.Response response;
     String message = 'Something went wrong';
@@ -47,13 +37,13 @@ mixin UserModel on ConnectedModel {
 
     if (mode == AuthMode.Login) {
       response = await http.post(
-        '$_hostUrl/users/login',
+        '$hostUrl/users/login',
         body: json.encode(loginFormData),
         headers: {'content-type': 'application/json'},
       );
     } else {
       response = await http.post(
-        '$_hostUrl/users/register',
+        '$hostUrl/users/register',
         body: json.encode(formData),
         headers: {'content-type': 'application/json'},
       );
@@ -85,7 +75,7 @@ mixin UserModel on ConnectedModel {
     } else if (responseData['error'] == 'USER_ALREADY_EXISTS') {
       message = 'User already exist';
     }
-    _isLoading = false;
+    isLoading = false;
     notifyListeners();
     return {'success': !hasError, 'message': message};
   }

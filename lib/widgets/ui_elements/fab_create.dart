@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 class FabCreate extends StatefulWidget {
+  final Function() onPressed;
+  final String tooltip;
+  final IconData icon;
+
+  FabCreate({this.onPressed, this.tooltip, this.icon});
+
   @override
   _FabCreateState createState() => _FabCreateState();
 }
@@ -9,27 +15,40 @@ class _FabCreateState extends State<FabCreate>
     with SingleTickerProviderStateMixin {
   bool isOpened = false;
   AnimationController _animationController;
-  Animation<Color> _animateColor;
+  Animation<Color> _buttonColor;
   Animation<double> _animateIcon;
+  Animation<double> _translateButton;
   Curve _curve = Curves.easeOut;
+  double _fabHeight = 56.0;
 
   @override
   initState() {
     _animationController =
-    AnimationController(vsync: this, duration: Duration(milliseconds: 500))
+    AnimationController(vsync: this, duration: Duration(milliseconds: 200))
       ..addListener(() {
         setState(() {});
       });
     _animateIcon =
         Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
-    _animateColor = ColorTween(
-      begin: Colors.blue,
-      end: Colors.red,
+    _buttonColor = ColorTween(
+      begin: Colors.blueGrey,
+      end: Colors.blueGrey,
     ).animate(CurvedAnimation(
       parent: _animationController,
       curve: Interval(
         0.00,
         1.00,
+        curve: Curves.linear,
+      ),
+    ));
+    _translateButton = Tween<double>(
+      begin: _fabHeight,
+      end: -14.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Interval(
+        0.0,
+        0.75,
         curve: _curve,
       ),
     ));
@@ -51,20 +70,81 @@ class _FabCreateState extends State<FabCreate>
     isOpened = !isOpened;
   }
 
+  Widget add() {
+    return Container(
+      child: FloatingActionButton(
+        onPressed: () {},
+        tooltip: 'Add',
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget image() {
+    return Container(
+      child: FloatingActionButton(
+        onPressed: () {},
+        tooltip: 'Image',
+        child: Icon(Icons.image),
+      ),
+    );
+  }
+
+  Widget inbox() {
+    return Container(
+      child: FloatingActionButton(
+        onPressed: () {},
+        tooltip: 'Inbox',
+        child: Icon(Icons.inbox),
+      ),
+    );
+  }
+
   Widget toggle() {
-    return FloatingActionButton(
-      backgroundColor: _animateColor.value,
-      onPressed: animate,
-      tooltip: 'Toggle',
-      child: AnimatedIcon(
-        icon: AnimatedIcons.menu_close,
-        progress: _animateIcon,
+    return Container(
+      child: FloatingActionButton(
+        backgroundColor: _buttonColor.value,
+        onPressed: animate,
+        tooltip: 'Toggle',
+        child: AnimatedIcon(
+          icon: AnimatedIcons.menu_close,
+          progress: _animateIcon,
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return toggle();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Transform(
+          transform: Matrix4.translationValues(
+            0.0,
+            _translateButton.value * 3.0,
+            0.0,
+          ),
+          child: add(),
+        ),
+        Transform(
+          transform: Matrix4.translationValues(
+            0.0,
+            _translateButton.value * 2.0,
+            0.0,
+          ),
+          child: image(),
+        ),
+        Transform(
+          transform: Matrix4.translationValues(
+            0.0,
+            _translateButton.value,
+            0.0,
+          ),
+          child: inbox(),
+        ),
+        toggle(),
+      ],
+    );
   }
 }

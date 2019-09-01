@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:itrack24/pages/news/news_content.dart';
+import 'package:itrack24/pages/news/news_feed.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import 'scoped-models/main.dart';
@@ -44,9 +46,28 @@ class _MyAppState extends State<MyApp> {
         ),
         routes: {
           '/': (BuildContext context) =>
-              _isAuthenticated ? ComplaintsPage() : AuthPage(),
+              _isAuthenticated ? NewsFeedPage(_model) : AuthPage(),
           '/complaints': (BuildContext context) =>
               _isAuthenticated ? ComplaintsPage() : AuthPage(),
+          '/newsFeed': (BuildContext context) =>
+              _isAuthenticated ? NewsFeedPage(_model) : AuthPage(),
+        },
+        onGenerateRoute: (RouteSettings settings) {
+          if (!_isAuthenticated) {
+            MaterialPageRoute(builder: (BuildContext context) => AuthPage());
+          }
+          final List<String> pathElements = settings.name.split('/');
+          if (pathElements[0] != '') {
+            return null;
+          }
+          if (pathElements[1] == 'NewsContent') {
+            final int newsId = int.parse(pathElements[2]);
+            return MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  _isAuthenticated ? NewsContentPage(newsId) : AuthPage(),
+            );
+          }
+          return null;
         },
       ),
     );

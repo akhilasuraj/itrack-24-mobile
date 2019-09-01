@@ -231,7 +231,7 @@ class _AuthPageState extends State<AuthPage> {
     print(_formData);
     final successInformation = await authenticate(_formData, _authMode);
     if (successInformation['success'])
-      Navigator.pushReplacementNamed(context, '/complaints');
+      Navigator.pushReplacementNamed(context, '/newsFeed');
     else {
       showDialog(
         context: context,
