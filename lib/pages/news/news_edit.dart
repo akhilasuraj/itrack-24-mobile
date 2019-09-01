@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:itrack24/scoped-models/main.dart';
 import 'package:itrack24/widgets/ui_elements/default_bottom_navbar.dart';
 import 'package:itrack24/widgets/ui_elements/default_side_drawer.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class NewsEditPage extends StatefulWidget {
   @override
@@ -19,11 +21,19 @@ class _NewsEditPageState extends State<NewsEditPage> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   Widget _buildFloatingActionButton() {
-    return FloatingActionButton(
-      onPressed: () {},
-      tooltip: 'Add a news',
-      backgroundColor: Colors.black87,
-      child: Icon(Icons.check),
+    return ScopedModelDescendant(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return FloatingActionButton(
+          onPressed: () {
+            _formKey.currentState.save();
+            model.submitNews(_formData['newsTitle'],_formData['newsContent']);
+            Navigator.pushNamed(context, '/newsFeed');
+          },
+          tooltip: 'Add a news',
+          backgroundColor: Colors.black87,
+          child: Icon(Icons.check),
+        );
+      },
     );
   }
 
@@ -44,6 +54,7 @@ class _NewsEditPageState extends State<NewsEditPage> {
         if (value.isEmpty) {
           return 'Title Cannot be empty';
         }
+        return null;
       },
       onSaved: (String value) {
         _formData['newsTitle'] = value;
@@ -85,6 +96,7 @@ class _NewsEditPageState extends State<NewsEditPage> {
         if (value.isEmpty) {
           return 'Content Cannot be empty';
         }
+        return null;
       },
       onSaved: (String value) {
         _formData['newsContent'] = value;
@@ -105,9 +117,35 @@ class _NewsEditPageState extends State<NewsEditPage> {
           key: _formKey,
           child: Column(
             children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Title :',
+                    style:
+                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
+                  ),
+                  Expanded(
+                    child: Container(),
+                  )
+                ],
+              ),
+              SizedBox(height: 10.0),
               _buildNewsTitleFormField(),
               SizedBox(height: 10.0),
               _buildImageUploadWindow(),
+              SizedBox(height: 10.0),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Content :',
+                    style:
+                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
+                  ),
+                  Expanded(
+                    child: Container(),
+                  )
+                ],
+              ),
               SizedBox(height: 10.0),
               _buildNewsContentFormField(),
             ],

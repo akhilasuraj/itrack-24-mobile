@@ -19,7 +19,11 @@ class NewsContentPage extends StatelessWidget {
 
         return SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.only(top: 30.0, left: 10.0, right: 10.0),
+            padding: EdgeInsets.only(
+              top: 30.0,
+              left: 10.0,
+              right: 10.0,
+            ),
             child: Column(
               children: <Widget>[
                 Text(
@@ -32,7 +36,10 @@ class NewsContentPage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'by ' + _selectedNews.firstName + ' ' + _selectedNews.lastName,
+                  'by ' +
+                      _selectedNews.firstName +
+                      ' ' +
+                      _selectedNews.lastName,
                   style: TextStyle(fontSize: 16.0, color: Colors.black26),
                 ),
                 Divider(),
@@ -70,7 +77,9 @@ class NewsContentPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 15.0,),
+                SizedBox(
+                  height: 15.0,
+                ),
                 Text(
                   _selectedNews.newsContent ?? 'News Content',
                   style: TextStyle(
@@ -85,15 +94,33 @@ class NewsContentPage extends StatelessWidget {
     );
   }
 
+  Widget _buildFab() {
+    return ScopedModelDescendant(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return Container(
+          child: model.user.userId == _selectedNews.userId
+              ? FloatingActionButton(
+                  backgroundColor: Colors.black87,
+                  onPressed: () {
+                    print(
+                        '----------------------------edit button--------------------------');
+                  },
+                  child: Icon(
+                    Icons.edit,
+                  ),
+                )
+              : Container(),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: DefaultSideDrawer(),
       body: _buildNewsContent(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.edit),
-      ),
+      floatingActionButton: _buildFab(),
     );
   }
 }

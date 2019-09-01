@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:itrack24/models/news.dart';
+import 'package:itrack24/scoped-models/User.dart';
 import 'package:itrack24/scoped-models/utility.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
 
-mixin NewsModel on Model, UtilityModel {
+mixin NewsModel on Model, UtilityModel, UserModel {
   List<News> _finalNewsList = List();
 
   Future<Null> fetchNews() async {
@@ -37,8 +38,24 @@ mixin NewsModel on Model, UtilityModel {
     return _finalNewsList;
   }
 
-//  Future<Null> createNews () async {
-//
-//    final http.Response response = await http.post('$hostUrl/users/addpost',body: json.encode(value));
-//  }
+  Future<Null> submitNews(String newsTitle, String newsContent) async {
+    isLoading = true;
+    final Map<String, dynamic> _newsDetails = {
+      'UserID': user.userId,
+      'FirstName': user.firstName,
+      'LastName': user.lastName,
+      'PostTitle': newsTitle,
+      'PostText': newsContent,
+      'PostImg': null,
+    };
+    final http.Response response = await http.post(
+      '$hostUrl/users/addpost',
+      body: json.encode(_newsDetails),
+      headers: {'content-type': 'application/json'},
+    );
+    isLoading = false;
+    final Map<String,dynamic> responseData = json.decode(response.body);
+    print(responseData);
+
+  }
 }
