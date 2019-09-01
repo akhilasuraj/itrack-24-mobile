@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:itrack24/pages/news/news_content.dart';
+import 'package:itrack24/pages/news/news_edit.dart';
 import 'package:itrack24/pages/news/news_feed.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -51,6 +52,8 @@ class _MyAppState extends State<MyApp> {
               _isAuthenticated ? ComplaintsPage() : AuthPage(),
           '/newsFeed': (BuildContext context) =>
               _isAuthenticated ? NewsFeedPage(_model) : AuthPage(),
+          '/NewsEditPage': (BuildContext context) =>
+          _isAuthenticated ? NewsEditPage() : AuthPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {

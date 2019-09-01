@@ -32,7 +32,7 @@ class NewsContentPage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'by' + _selectedNews.firstName + ' ' + _selectedNews.lastName,
+                  'by ' + _selectedNews.firstName + ' ' + _selectedNews.lastName,
                   style: TextStyle(fontSize: 16.0, color: Colors.black26),
                 ),
                 Divider(),

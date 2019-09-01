@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itrack24/pages/news/news_card.dart';
 import 'package:itrack24/scoped-models/main.dart';
+import 'package:itrack24/widgets/ui_elements/default_bottom_navbar.dart';
 import 'package:itrack24/widgets/ui_elements/default_side_drawer.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -35,36 +36,16 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
 
   Widget _buildFloatingActionButton() {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pushNamed(context, '/NewsEditPage');
+      },
       tooltip: 'Add a news',
       backgroundColor: Colors.black87,
       child: Icon(Icons.add),
     );
   }
 
-  Widget _buildBottomAppBar(GlobalKey<ScaffoldState> _scaffoldKey) {
-    return BottomAppBar(
-      color: Colors.red, notchMargin: 7.0,
-      // elevation: 20.0,
-      shape: CircularNotchedRectangle(),
-      child: Container(
-        height: 50.0,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            IconButton(
-              onPressed: () => _scaffoldKey.currentState.openDrawer(),
-              icon: Icon(
-                Icons.menu,
-                color: Colors.black,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +66,7 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
       ),
       floatingActionButton: _buildFloatingActionButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      bottomNavigationBar: _buildBottomAppBar(_scaffoldKey),
+      bottomNavigationBar: defaultBottomAppBar(_scaffoldKey),
     );
   }
 }
