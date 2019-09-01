@@ -11,12 +11,16 @@ class NewsEditPage extends StatelessWidget {
     );
   }
 
+  Widget _buildNewsEditFormField(){
+    return Container();
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey =
         new GlobalKey<ScaffoldState>();
     return Scaffold(
-      body: Container(),
+      body: _buildNewsEditFormField(),
       floatingActionButton: _buildFloatingActionButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: defaultBottomAppBar(_scaffoldKey),
