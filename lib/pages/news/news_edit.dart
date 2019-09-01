@@ -1,7 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:itrack24/widgets/ui_elements/default_bottom_navbar.dart';
+import 'package:itrack24/widgets/ui_elements/default_side_drawer.dart';
 
-class NewsEditPage extends StatelessWidget {
+class NewsEditPage extends StatefulWidget {
+  @override
+  _NewsEditPageState createState() => _NewsEditPageState();
+}
+
+class _NewsEditPageState extends State<NewsEditPage> {
+  final Map<String, dynamic> _formData = {
+    'newsTitle': null,
+    'newsContent': null,
+    'image': null,
+  };
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+
   Widget _buildFloatingActionButton() {
     return FloatingActionButton(
       onPressed: () {},
@@ -11,16 +27,102 @@ class NewsEditPage extends StatelessWidget {
     );
   }
 
-  Widget _buildNewsEditFormField(){
-    return Container();
+  Widget _buildNewsTitleFormField() {
+    return TextFormField(
+      maxLength: 150,
+      maxLines: null,
+      decoration: InputDecoration(
+        fillColor: Colors.white,
+        border: new OutlineInputBorder(
+          borderRadius: new BorderRadius.circular(25.0),
+          borderSide: new BorderSide(),
+        ),
+        filled: true,
+        hintText: 'News Title',
+      ),
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'Title Cannot be empty';
+        }
+      },
+      onSaved: (String value) {
+        _formData['newsTitle'] = value;
+      },
+    );
+  }
+
+  Widget _buildImageUploadWindow() {
+    return ClipRRect(
+      borderRadius: BorderRadius.all(
+        Radius.circular(8.0),
+      ),
+      child: AspectRatio(
+        aspectRatio: 16 / 8,
+        child: FadeInImage(
+          image: NetworkImage(
+              'https://assets.pcmag.com/media/images/555832-google-pixel-3a.jpg?width=810&height=456'),
+          fit: BoxFit.cover,
+          alignment: FractionalOffset.topCenter,
+          placeholder: AssetImage('assets/android.jpg'),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNewsContentFormField() {
+    return TextFormField(
+      maxLines: null,
+      decoration: InputDecoration(
+        fillColor: Colors.white,
+        border: new OutlineInputBorder(
+          borderRadius: new BorderRadius.circular(25.0),
+          borderSide: new BorderSide(),
+        ),
+        filled: true,
+        hintText: 'News Content',
+      ),
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'Content Cannot be empty';
+        }
+      },
+      onSaved: (String value) {
+        _formData['newsContent'] = value;
+      },
+    );
+  }
+
+  Widget _buildNewsSubmitFormField() {
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.only(
+          top: 30.0,
+          left: 10.0,
+          right: 10.0,
+          bottom: 10.0,
+        ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              _buildNewsTitleFormField(),
+              SizedBox(height: 10.0),
+              _buildImageUploadWindow(),
+              SizedBox(height: 10.0),
+              _buildNewsContentFormField(),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey =
-        new GlobalKey<ScaffoldState>();
     return Scaffold(
-      body: _buildNewsEditFormField(),
+      key: _scaffoldKey,
+      drawer: DefaultSideDrawer(),
+      body: _buildNewsSubmitFormField(),
       floatingActionButton: _buildFloatingActionButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: defaultBottomAppBar(_scaffoldKey),
