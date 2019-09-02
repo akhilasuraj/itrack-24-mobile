@@ -1,13 +1,33 @@
 import 'dart:convert';
 
 import 'package:itrack24/models/news.dart';
-import 'package:itrack24/scoped-models/User.dart';
+import 'package:itrack24/scoped-models/user.dart';
 import 'package:itrack24/scoped-models/utility.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
 
 mixin NewsModel on Model, UtilityModel, UserModel {
   List<News> _finalNewsList = List();
+  News _selectedNews;
+  bool _isEdit;
+
+  bool get isEdit {
+    return _isEdit;
+  }
+
+  set isEdit(bool stat) {
+    _isEdit = stat;
+    notifyListeners();
+  }
+
+  News get selectedNews {
+    return _selectedNews;
+  }
+
+  set selectedNews(News news) {
+    _selectedNews = news;
+    notifyListeners();
+  }
 
   Future<Null> fetchNews() async {
     isLoading = true;
@@ -54,8 +74,7 @@ mixin NewsModel on Model, UtilityModel, UserModel {
       headers: {'content-type': 'application/json'},
     );
     isLoading = false;
-    final Map<String,dynamic> responseData = json.decode(response.body);
+    final Map<String, dynamic> responseData = json.decode(response.body);
     print(responseData);
-
   }
 }

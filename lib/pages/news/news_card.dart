@@ -13,7 +13,7 @@ class NewsCard extends StatelessWidget {
         Navigator.pushNamed(context, '/NewsContent/' + news.newsId.toString());
       },
       child: Card(
-        margin: EdgeInsets.only(top: 13.0, right: 9.0, left: 9.0),
+        margin: EdgeInsets.only(top: 6.0, right: 9.0, left: 9.0,bottom: 7.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),

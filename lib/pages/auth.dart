@@ -73,7 +73,7 @@ class _AuthPageState extends State<AuthPage> {
       ),
       obscureText: true,
       validator: (String value) {
-        if (value.isEmpty || value.length < 8) {
+        if (value.isEmpty || value.length < 6) {
           return 'Please enter a valid password';
         }
       },

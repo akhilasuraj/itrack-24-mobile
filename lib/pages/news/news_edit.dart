@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:itrack24/models/news.dart';
 import 'package:itrack24/scoped-models/main.dart';
 import 'package:itrack24/widgets/ui_elements/default_bottom_navbar.dart';
 import 'package:itrack24/widgets/ui_elements/default_side_drawer.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class NewsEditPage extends StatefulWidget {
+  final bool isEdit;
+  final News editableNews;
+
+  NewsEditPage(this.isEdit, {this.editableNews});
+
   @override
   _NewsEditPageState createState() => _NewsEditPageState();
 }
 
 class _NewsEditPageState extends State<NewsEditPage> {
+  TextEditingController newsTitleController = new TextEditingController();
+  TextEditingController newsContentController = new TextEditingController();
+
   final Map<String, dynamic> _formData = {
     'newsTitle': null,
     'newsContent': null,
@@ -26,7 +35,7 @@ class _NewsEditPageState extends State<NewsEditPage> {
         return FloatingActionButton(
           onPressed: () {
             _formKey.currentState.save();
-            model.submitNews(_formData['newsTitle'],_formData['newsContent']);
+            model.submitNews(_formData['newsTitle'], _formData['newsContent']);
             Navigator.pushNamed(context, '/newsFeed');
           },
           tooltip: 'Add a news',
@@ -39,6 +48,8 @@ class _NewsEditPageState extends State<NewsEditPage> {
 
   Widget _buildNewsTitleFormField() {
     return TextFormField(
+      controller: newsTitleController,
+      textAlign: TextAlign.center,
       maxLength: 150,
       maxLines: null,
       decoration: InputDecoration(
@@ -82,6 +93,8 @@ class _NewsEditPageState extends State<NewsEditPage> {
 
   Widget _buildNewsContentFormField() {
     return TextFormField(
+      controller: newsContentController,
+      textAlign: TextAlign.center,
       maxLines: null,
       decoration: InputDecoration(
         fillColor: Colors.white,
@@ -107,12 +120,8 @@ class _NewsEditPageState extends State<NewsEditPage> {
   Widget _buildNewsSubmitFormField() {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.only(
-          top: 30.0,
-          left: 10.0,
-          right: 10.0,
-          bottom: 10.0,
-        ),
+        padding:
+            EdgeInsets.only(top: 30.0, left: 10.0, right: 10.0, bottom: 10.0),
         child: Form(
           key: _formKey,
           child: Column(
@@ -165,5 +174,15 @@ class _NewsEditPageState extends State<NewsEditPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: defaultBottomAppBar(_scaffoldKey),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.isEdit) {
+      newsTitleController.text = widget.editableNews.newsTitle;
+      newsContentController.text = widget.editableNews.newsContent;
+    }
   }
 }

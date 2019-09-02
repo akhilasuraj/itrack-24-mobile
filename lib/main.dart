@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
           '/newsFeed': (BuildContext context) =>
               _isAuthenticated ? NewsFeedPage(_model) : AuthPage(),
           '/NewsEditPage': (BuildContext context) =>
-          _isAuthenticated ? NewsEditPage() : AuthPage(),
+          _isAuthenticated ? NewsEditPage(_model.isEdit, editableNews: _model.selectedNews) : AuthPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {
@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
             final int newsId = int.parse(pathElements[2]);
             return MaterialPageRoute(
               builder: (BuildContext context) =>
-                  _isAuthenticated ? NewsContentPage(newsId) : AuthPage(),
+                  _isAuthenticated ? NewsContentPage(newsId,_model) : AuthPage(),
             );
           }
           return null;

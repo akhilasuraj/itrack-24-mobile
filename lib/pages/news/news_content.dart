@@ -4,17 +4,23 @@ import 'package:itrack24/scoped-models/main.dart';
 import 'package:itrack24/widgets/ui_elements/default_side_drawer.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class NewsContentPage extends StatelessWidget {
+class NewsContentPage extends StatefulWidget {
   final int newsId;
-  News _selectedNews;
+  MainModel _model;
 
-  NewsContentPage(this.newsId);
+  NewsContentPage(this.newsId,this._model);
+
+  @override
+  _NewsContentPageState createState() => _NewsContentPageState();
+}
+
+class _NewsContentPageState extends State<NewsContentPage> {
 
   Widget _buildNewsContent() {
     return ScopedModelDescendant(
       builder: (BuildContext context, Widget child, MainModel model) {
-        _selectedNews = model.finalNewsList.firstWhere((News news) {
-          return news.newsId == newsId;
+        model.selectedNews = model.finalNewsList.firstWhere((News news) {
+          return news.newsId == widget.newsId;
         });
 
         return SingleChildScrollView(
@@ -27,8 +33,8 @@ class NewsContentPage extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text(
-                  _selectedNews.newsTitle ??
-                      'News Title ' + _selectedNews.newsId.toString(),
+                  model.selectedNews.newsTitle ??
+                      'News Title ' + model.selectedNews.newsId.toString(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
@@ -37,9 +43,9 @@ class NewsContentPage extends StatelessWidget {
                 ),
                 Text(
                   'by ' +
-                      _selectedNews.firstName +
+                      model.selectedNews.firstName +
                       ' ' +
-                      _selectedNews.lastName,
+                      model.selectedNews.lastName,
                   style: TextStyle(fontSize: 16.0, color: Colors.black26),
                 ),
                 Divider(),
@@ -53,7 +59,7 @@ class NewsContentPage extends StatelessWidget {
                       width: 5.0,
                     ),
                     Text(
-                      _selectedNews.date,
+                      model.selectedNews.date,
                       style: TextStyle(color: Colors.black38),
                     ),
                     Expanded(
@@ -81,7 +87,7 @@ class NewsContentPage extends StatelessWidget {
                   height: 15.0,
                 ),
                 Text(
-                  _selectedNews.newsContent ?? 'News Content',
+                  model.selectedNews.newsContent ?? 'News Content',
                   style: TextStyle(
                       fontSize: 22.0, height: 1.3, fontWeight: FontWeight.w300),
                   textAlign: TextAlign.center,
@@ -98,12 +104,11 @@ class NewsContentPage extends StatelessWidget {
     return ScopedModelDescendant(
       builder: (BuildContext context, Widget child, MainModel model) {
         return Container(
-          child: model.user.userId == _selectedNews.userId
+          child: model.user.userId == model.selectedNews.userId
               ? FloatingActionButton(
                   backgroundColor: Colors.black87,
                   onPressed: () {
-                    print(
-                        '----------------------------edit button--------------------------');
+                   Navigator.pushNamed(context, '/NewsEditPage');
                   },
                   child: Icon(
                     Icons.edit,
@@ -123,4 +128,18 @@ class NewsContentPage extends StatelessWidget {
       floatingActionButton: _buildFab(),
     );
   }
+
+  @override
+  void dispose() {
+    widget._model.selectedNews = null;
+    widget._model.isEdit = false;
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget._model.isEdit = true;
+  }
+
 }
