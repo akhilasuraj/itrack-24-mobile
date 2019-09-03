@@ -7,6 +7,7 @@ class News {
   final String lastName;
   final String newsTitle;
   final String newsContent;
+  final String imageUrl;
   final String date;
   final String time;
 
@@ -16,6 +17,7 @@ class News {
     @required this.firstName,
     @required this.lastName,
     @required this.newsTitle,
+    @required this.imageUrl,
     @required this.newsContent,
     @required this.date,
     @required this.time,

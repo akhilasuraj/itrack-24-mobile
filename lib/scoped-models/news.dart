@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 import 'package:itrack24/models/news.dart';
+import 'package:itrack24/scoped-models/image.dart';
 import 'package:itrack24/scoped-models/user.dart';
 import 'package:itrack24/scoped-models/utility.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
 
-mixin NewsModel on Model, UtilityModel, UserModel {
+mixin NewsModel on Model, UtilityModel, UserModel,ImageModel {
   List<News> _finalNewsList = List();
   News _selectedNews;
   bool _isEdit;
@@ -42,6 +43,7 @@ mixin NewsModel on Model, UtilityModel, UserModel {
         userId: news['UserID'],
         firstName: news['FirstName'],
         lastName: news['LastName'],
+        imageUrl: news['PostImg'],
         newsTitle: news['PostTitle'],
         newsContent: news['PostText'],
         date: news['PostDate'],
@@ -60,6 +62,7 @@ mixin NewsModel on Model, UtilityModel, UserModel {
 
   Future<Null> submitNews(String newsTitle, String newsContent) async {
     isLoading = true;
+    await uploadImage();
     final Map<String, dynamic> _newsDetails = {
       'UserID': user.userId,
       'FirstName': user.firstName,

@@ -75,8 +75,7 @@ class _NewsContentPageState extends State<NewsContentPage> {
                   child: AspectRatio(
                     aspectRatio: 16 / 8,
                     child: FadeInImage(
-                      image: NetworkImage(
-                          'https://assets.pcmag.com/media/images/555832-google-pixel-3a.jpg?width=810&height=456'),
+                      image: NetworkImage('${model.hostUrl}/${model.selectedNews.imageUrl}'),
                       fit: BoxFit.cover,
                       alignment: FractionalOffset.topCenter,
                       placeholder: AssetImage('assets/android.jpg'),

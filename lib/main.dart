@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
           '/newsFeed': (BuildContext context) =>
               _isAuthenticated ? NewsFeedPage(_model) : AuthPage(),
           '/NewsEditPage': (BuildContext context) =>
-          _isAuthenticated ? NewsEditPage(_model.isEdit, editableNews: _model.selectedNews) : AuthPage(),
+          _isAuthenticated ? NewsEditPage(_model.isEdit,_model, editableNews: _model.selectedNews) : AuthPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {

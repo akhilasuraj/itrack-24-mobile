@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itrack24/models/news.dart';
+import 'package:scoped_model/scoped_model.dart';
+import '../../scoped-models/main.dart';
 
 class NewsCard extends StatelessWidget {
   final News news;
@@ -13,7 +15,7 @@ class NewsCard extends StatelessWidget {
         Navigator.pushNamed(context, '/NewsContent/' + news.newsId.toString());
       },
       child: Card(
-        margin: EdgeInsets.only(top: 6.0, right: 9.0, left: 9.0,bottom: 7.0),
+        margin: EdgeInsets.only(top: 6.0, right: 9.0, left: 9.0, bottom: 7.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
@@ -26,20 +28,23 @@ class NewsCard extends StatelessWidget {
               ),
               child: AspectRatio(
                 aspectRatio: 16 / 8,
-                child: FadeInImage(
-                  image: NetworkImage(
-                      'https://assets.pcmag.com/media/images/555832-google-pixel-3a.jpg?width=810&height=456'),
-                  fit: BoxFit.cover,
-                  alignment: FractionalOffset.topCenter,
-                  placeholder: AssetImage('assets/android.jpg'),
+                child: ScopedModelDescendant(
+                  builder:
+                      (BuildContext context, Widget child, MainModel model) {
+                    return FadeInImage(
+                      image: NetworkImage('${model.hostUrl}/${this.news.imageUrl}'),
+                      fit: BoxFit.cover,
+                      alignment: FractionalOffset.topCenter,
+                      placeholder: AssetImage('assets/android.jpg'),
+                    );
+                  },
                 ),
               ),
             ),
             Container(
               padding: EdgeInsets.all(20.0),
               child: Text(
-                news.newsTitle ??
-                    'Default News Title',
+                news.newsTitle ?? 'Default News Title',
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,

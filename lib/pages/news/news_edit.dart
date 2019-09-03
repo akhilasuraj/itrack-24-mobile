@@ -11,15 +11,15 @@ import 'package:scoped_model/scoped_model.dart';
 class NewsEditPage extends StatefulWidget {
   final bool isEdit;
   final News editableNews;
+  final MainModel _model;
 
-  NewsEditPage(this.isEdit, {this.editableNews});
+  NewsEditPage(this.isEdit, this._model, {this.editableNews});
 
   @override
   _NewsEditPageState createState() => _NewsEditPageState();
 }
 
 class _NewsEditPageState extends State<NewsEditPage> {
-  File _pickedImage;
   TextEditingController newsTitleController = new TextEditingController();
   TextEditingController newsContentController = new TextEditingController();
 
@@ -36,13 +36,15 @@ class _NewsEditPageState extends State<NewsEditPage> {
     return ScopedModelDescendant(
       builder: (BuildContext context, Widget child, MainModel model) {
         return FloatingActionButton(
-          onPressed: () {
-            if (_formKey.currentState.validate()) {
-              _formKey.currentState.save();
-              model.submitNews(
-                  _formData['newsTitle'], _formData['newsContent']);
-              Navigator.pushNamed(context, '/newsFeed');
+          onPressed: () async{
+            if (!_formKey.currentState.validate()) {
+              return null;
             }
+            _formKey.currentState.save();
+           await model.submitNews(
+                _formData['newsTitle'], _formData['newsContent']);
+            model.pickedImage = null;
+            Navigator.pushNamed(context, '/newsFeed');
           },
           tooltip: 'Add a news',
           backgroundColor: Colors.black87,
@@ -82,7 +84,7 @@ class _NewsEditPageState extends State<NewsEditPage> {
   Widget _buildImageUploadWindow() {
     return GestureDetector(
         onTap: () => _buildImagePickerBottomSheet(context),
-        child: _pickedImage == null
+        child: widget._model.pickedImage == null
             ? _buildImageUploadButton()
             : _buildCapturedImage());
   }
@@ -120,7 +122,7 @@ class _NewsEditPageState extends State<NewsEditPage> {
       child: AspectRatio(
         aspectRatio: 16 / 8,
         child: Image.file(
-          _pickedImage,
+          widget._model.pickedImage,
           fit: BoxFit.cover,
           alignment: FractionalOffset.center,
         ),
@@ -260,7 +262,7 @@ class _NewsEditPageState extends State<NewsEditPage> {
     File image = await ImagePicker.pickImage(source: source, maxWidth: 500);
     Navigator.pop(context);
     setState(() {
-      _pickedImage = image;
+      widget._model.pickedImage = image;
     });
   }
 
@@ -274,6 +276,12 @@ class _NewsEditPageState extends State<NewsEditPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       bottomNavigationBar: defaultBottomAppBar(_scaffoldKey),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget._model.pickedImage = null;
   }
 
   @override
