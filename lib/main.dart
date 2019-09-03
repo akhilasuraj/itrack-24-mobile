@@ -7,7 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'scoped-models/main.dart';
 
 import './pages/auth.dart';
-import 'pages/complaints.dart';
+import 'pages/complain/complaints.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,6 +24,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    _model.isEdit = false;
     _model.autoAuthenticate();
     _model.userSubject.listen((bool isAuthenticated) {
       setState(() {

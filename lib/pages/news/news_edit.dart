@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:itrack24/models/news.dart';
 import 'package:itrack24/scoped-models/main.dart';
 import 'package:itrack24/widgets/ui_elements/default_bottom_navbar.dart';
@@ -16,6 +19,7 @@ class NewsEditPage extends StatefulWidget {
 }
 
 class _NewsEditPageState extends State<NewsEditPage> {
+  File _pickedImage;
   TextEditingController newsTitleController = new TextEditingController();
   TextEditingController newsContentController = new TextEditingController();
 
@@ -26,7 +30,6 @@ class _NewsEditPageState extends State<NewsEditPage> {
   };
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   Widget _buildFloatingActionButton() {
@@ -34,9 +37,12 @@ class _NewsEditPageState extends State<NewsEditPage> {
       builder: (BuildContext context, Widget child, MainModel model) {
         return FloatingActionButton(
           onPressed: () {
-            _formKey.currentState.save();
-            model.submitNews(_formData['newsTitle'], _formData['newsContent']);
-            Navigator.pushNamed(context, '/newsFeed');
+            if (_formKey.currentState.validate()) {
+              _formKey.currentState.save();
+              model.submitNews(
+                  _formData['newsTitle'], _formData['newsContent']);
+              Navigator.pushNamed(context, '/newsFeed');
+            }
           },
           tooltip: 'Add a news',
           backgroundColor: Colors.black87,
@@ -74,18 +80,49 @@ class _NewsEditPageState extends State<NewsEditPage> {
   }
 
   Widget _buildImageUploadWindow() {
+    return GestureDetector(
+        onTap: () => _buildImagePickerBottomSheet(context),
+        child: _pickedImage == null
+            ? _buildImageUploadButton()
+            : _buildCapturedImage());
+  }
+
+  Widget _buildImageUploadButton() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.fromLTRB(0, 20.0, 0, 20.0),
+      decoration: BoxDecoration(
+        border: Border.all(width: 1.0),
+        borderRadius: BorderRadius.circular(25.0),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.camera_alt,
+            size: 30.0,
+          ),
+          SizedBox(width: 10.0),
+          Text(
+            'Pick an image',
+            style: TextStyle(fontSize: 17.0),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCapturedImage() {
     return ClipRRect(
       borderRadius: BorderRadius.all(
         Radius.circular(8.0),
       ),
       child: AspectRatio(
         aspectRatio: 16 / 8,
-        child: FadeInImage(
-          image: NetworkImage(
-              'https://assets.pcmag.com/media/images/555832-google-pixel-3a.jpg?width=810&height=456'),
+        child: Image.file(
+          _pickedImage,
           fit: BoxFit.cover,
-          alignment: FractionalOffset.topCenter,
-          placeholder: AssetImage('assets/android.jpg'),
+          alignment: FractionalOffset.center,
         ),
       ),
     );
@@ -126,20 +163,21 @@ class _NewsEditPageState extends State<NewsEditPage> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Text(
-                    'Title :',
+              Row(children: <Widget>[
+                Text('Title :',
                     style:
-                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
-                  ),
-                  Expanded(
-                    child: Container(),
-                  )
-                ],
-              ),
+                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700)),
+                Expanded(child: Container())
+              ]),
               SizedBox(height: 10.0),
               _buildNewsTitleFormField(),
+              //SizedBox(height: 10.0),
+              Row(children: <Widget>[
+                Text('Image :',
+                    style:
+                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700)),
+                Expanded(child: Container())
+              ]),
               SizedBox(height: 10.0),
               _buildImageUploadWindow(),
               SizedBox(height: 10.0),
@@ -162,6 +200,68 @@ class _NewsEditPageState extends State<NewsEditPage> {
         ),
       ),
     );
+  }
+
+  Widget _buildBottomSheetButton(String text, Icon icon, ImageSource source) {
+    return GestureDetector(
+      onTap: () {
+        _getImage(context, source);
+      },
+      child: Container(
+        padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+            border: Border.all(width: 1.0),
+            borderRadius: BorderRadius.circular(4.0)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            icon,
+            SizedBox(width: 10.0),
+            Text(text, style: TextStyle(fontWeight: FontWeight.w600))
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _buildImagePickerBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            height: 150.0,
+            padding: EdgeInsets.all(10.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'Pick an Image',
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w500),
+                ),
+                SizedBox(height: 10.0),
+                _buildBottomSheetButton(
+                  'Camera',
+                  Icon(Icons.camera_alt),
+                  ImageSource.camera,
+                ),
+                SizedBox(height: 10.0),
+                _buildBottomSheetButton(
+                  'Gallery',
+                  Icon(Icons.image),
+                  ImageSource.gallery,
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  void _getImage(BuildContext context, ImageSource source) async {
+    File image = await ImagePicker.pickImage(source: source, maxWidth: 500);
+    Navigator.pop(context);
+    setState(() {
+      _pickedImage = image;
+    });
   }
 
   @override
