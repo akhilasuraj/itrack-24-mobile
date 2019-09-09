@@ -35,9 +35,36 @@ class DefaultSideDrawer extends StatelessWidget {
                       ),
                     ),
                     ListTile(
+                      title: Text('News Feed'),
+                      leading: Icon(Icons.chat),
+                      onTap: () {
+                        Navigator.pushReplacementNamed(context, '/newsFeed');
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Complains'),
+                      leading: Icon(Icons.hourglass_empty),
+                      onTap: () {
+                        Navigator.pushReplacementNamed(context, '/complaints');
+                      },
+                    ),
+                    Divider(),
+                    ListTile(
                       title: Text('Settings'),
                       leading: Icon(Icons.settings),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(
+                            context, '/SettingsMainPage');
+                      },
+                    ),
+                    ListTile(
+                      title: Text('Contact us'),
+                      leading: Icon(Icons.call),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, '/ContactPage');
+                      },
                     ),
                     Divider(),
                     LogoutListTile(),

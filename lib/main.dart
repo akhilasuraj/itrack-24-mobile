@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:itrack24/pages/contact.dart';
 import 'package:itrack24/pages/news/news_content.dart';
 import 'package:itrack24/pages/news/news_edit.dart';
 import 'package:itrack24/pages/news/news_feed.dart';
+import 'package:itrack24/pages/settings/settings_main.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import 'scoped-models/main.dart';
@@ -53,8 +55,14 @@ class _MyAppState extends State<MyApp> {
               _isAuthenticated ? ComplaintsPage() : AuthPage(),
           '/newsFeed': (BuildContext context) =>
               _isAuthenticated ? NewsFeedPage(_model) : AuthPage(),
-          '/NewsEditPage': (BuildContext context) =>
-          _isAuthenticated ? NewsEditPage(_model.isEdit,_model, editableNews: _model.selectedNews) : AuthPage(),
+          '/NewsEditPage': (BuildContext context) => _isAuthenticated
+              ? NewsEditPage(_model.isEdit, _model,
+                  editableNews: _model.selectedNews)
+              : AuthPage(),
+          '/ContactPage': (BuildContext context) =>
+              _isAuthenticated ? ContactPage() : AuthPage(),
+          '/SettingsMainPage': (BuildContext context) =>
+              _isAuthenticated ? SettingsMainPage() : AuthPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {
@@ -67,8 +75,9 @@ class _MyAppState extends State<MyApp> {
           if (pathElements[1] == 'NewsContent') {
             final int newsId = int.parse(pathElements[2]);
             return MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  _isAuthenticated ? NewsContentPage(newsId,_model) : AuthPage(),
+              builder: (BuildContext context) => _isAuthenticated
+                  ? NewsContentPage(newsId, _model)
+                  : AuthPage(),
             );
           }
           return null;

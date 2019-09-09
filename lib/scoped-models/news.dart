@@ -35,7 +35,6 @@ mixin NewsModel on Model, UtilityModel, UserModel,ImageModel {
     final http.Response response = await http.get('$hostUrl/users/viewposts');
 
     final List fetchedNews = json.decode(response.body);
-    print(fetchedNews);
     final List<News> fetchedNewsList = [];
     fetchedNews.forEach((news) {
       News fetchedNewsElement = News(
@@ -62,7 +61,7 @@ mixin NewsModel on Model, UtilityModel, UserModel,ImageModel {
 
   Future<Null> submitNews(String newsTitle, String newsContent) async {
     isLoading = true;
-    await uploadImage();
+    await uploadImage('/users/addimage');
     final Map<String, dynamic> _newsDetails = {
       'UserID': user.userId,
       'FirstName': user.firstName,

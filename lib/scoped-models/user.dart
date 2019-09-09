@@ -26,7 +26,6 @@ mixin UserModel on Model, UtilityModel {
   Future<Map<String, dynamic>> authenticate(Map<String, dynamic> formData,
       [AuthMode mode = AuthMode.Login]) async {
     isLoading = true;
-    notifyListeners();
     http.Response response;
     String message = 'Something went wrong';
     bool hasError = true;

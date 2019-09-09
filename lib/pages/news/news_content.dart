@@ -6,7 +6,7 @@ import 'package:scoped_model/scoped_model.dart';
 
 class NewsContentPage extends StatefulWidget {
   final int newsId;
-  MainModel _model;
+  final MainModel _model;
 
   NewsContentPage(this.newsId,this._model);
 
@@ -77,7 +77,7 @@ class _NewsContentPageState extends State<NewsContentPage> {
                     child: FadeInImage(
                       image: NetworkImage('${model.hostUrl}/${model.selectedNews.imageUrl}'),
                       fit: BoxFit.cover,
-                      alignment: FractionalOffset.topCenter,
+                      alignment: FractionalOffset.center,
                       placeholder: AssetImage('assets/android.jpg'),
                     ),
                   ),

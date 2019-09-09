@@ -45,28 +45,56 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
     );
   }
 
-
+  Future<bool> _willPop(BuildContext context) async {
+    if(!(Navigator.canPop(context)))
+     return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Alert !'),
+              content: Text('Do you realy want to exit from the app ?'),
+              actions: <Widget>[
+                FlatButton(
+                    child: Text('Yes'),
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    }),
+                FlatButton(
+                    child: Text('No'),
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    })
+              ],
+            );
+          },
+        ) ??
+        false;
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey =
         new GlobalKey<ScaffoldState>();
-    return Scaffold(
-      key: _scaffoldKey,
-      extendBody: true,
-      drawer: DefaultSideDrawer(),
-      body: ScopedModelDescendant<MainModel>(
-        builder: (BuildContext context, Widget child, MainModel model) {
-          return model.isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : _buildNewsFeed(model);
-        },
+    return WillPopScope(
+      onWillPop: () => _willPop(context),
+      child: Scaffold(
+        key: _scaffoldKey,
+        extendBody: true,
+        drawer: DefaultSideDrawer(),
+        body: ScopedModelDescendant<MainModel>(
+          builder: (BuildContext context, Widget child, MainModel model) {
+            return model.isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : _buildNewsFeed(model);
+          },
+        ),
+        floatingActionButton: _buildFloatingActionButton(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        bottomNavigationBar: defaultBottomAppBar(_scaffoldKey),
       ),
-      floatingActionButton: _buildFloatingActionButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      bottomNavigationBar: defaultBottomAppBar(_scaffoldKey),
     );
   }
 }

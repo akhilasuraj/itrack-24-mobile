@@ -36,15 +36,15 @@ class _NewsEditPageState extends State<NewsEditPage> {
     return ScopedModelDescendant(
       builder: (BuildContext context, Widget child, MainModel model) {
         return FloatingActionButton(
-          onPressed: () async{
-            if (!_formKey.currentState.validate()) {
+          onPressed: () async {
+            if (!_formKey.currentState.validate() ||
+                model.pickedImage == null) {
               return null;
             }
             _formKey.currentState.save();
-           await model.submitNews(
+            await model.submitNews(
                 _formData['newsTitle'], _formData['newsContent']);
-            model.pickedImage = null;
-            Navigator.pushNamed(context, '/newsFeed');
+            Navigator.pushReplacementNamed(context, '/newsFeed');
           },
           tooltip: 'Add a news',
           backgroundColor: Colors.black87,

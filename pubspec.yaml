@@ -51,8 +51,12 @@ flutter:
   assets:
     - assets/background.jpg
     - assets/user.png
-    - android.jpg
-    - cameraImage.jpg
+    - assets/android.jpg
+    - assets/cameraImage.jpg
+    - assets/LogoBlack.jpg
+    - assets/logoTransparentBlack.png
+    - assets/logoTransparentWhite.png
+    - assets/logoWhite.jpg
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

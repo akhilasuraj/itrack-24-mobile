@@ -34,7 +34,7 @@ class NewsCard extends StatelessWidget {
                     return FadeInImage(
                       image: NetworkImage('${model.hostUrl}/${this.news.imageUrl}'),
                       fit: BoxFit.cover,
-                      alignment: FractionalOffset.topCenter,
+                      alignment: FractionalOffset.center,
                       placeholder: AssetImage('assets/android.jpg'),
                     );
                   },

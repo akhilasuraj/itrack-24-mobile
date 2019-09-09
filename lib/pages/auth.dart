@@ -22,16 +22,17 @@ class _AuthPageState extends State<AuthPage> {
     'contact_num': null,
     'resetPasswordToken': null,
     'resetPasswordExpires': null,
+    'isActivated': true,
   };
 
-  DecorationImage _buildBackgroundImage() {
-    return DecorationImage(
-      fit: BoxFit.cover,
-      // colorFilter:
-      //     ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
-      image: AssetImage('assets/background.jpg'),
-    );
-  }
+//  DecorationImage _buildBackgroundImage() {
+//    return DecorationImage(
+//      fit: BoxFit.cover,
+//      // colorFilter:
+//      //     ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
+//      image: AssetImage('assets/background.jpg'),
+//    );
+//  }
 
   Widget _buildEmailTextField() {
     return TextFormField(
@@ -52,6 +53,7 @@ class _AuthPageState extends State<AuthPage> {
                 .hasMatch(value)) {
           return 'Please enter a valid email';
         }
+        return null;
       },
       onSaved: (String value) {
         _formData['email'] = value;
@@ -76,6 +78,7 @@ class _AuthPageState extends State<AuthPage> {
         if (value.isEmpty || value.length < 6) {
           return 'Please enter a valid password';
         }
+        return null;
       },
       onSaved: (String value) {
         _formData['password'] = value;
@@ -99,6 +102,7 @@ class _AuthPageState extends State<AuthPage> {
         if (value.isEmpty) {
           return 'cannot be empty';
         }
+        return null;
       },
       onSaved: (String value) {
         _formData['first_name'] = value;
@@ -122,6 +126,7 @@ class _AuthPageState extends State<AuthPage> {
         if (value.isEmpty) {
           return 'cannot be empty';
         }
+        return null;
       },
       onSaved: (String value) {
         _formData['last_name'] = value;
@@ -141,6 +146,7 @@ class _AuthPageState extends State<AuthPage> {
         if (value.isEmpty || value.length < 10) {
           return 'Your address contains less than 10 characters';
         }
+        return null;
       },
       onSaved: (String value) {
         _formData['address'] = value;
@@ -164,6 +170,7 @@ class _AuthPageState extends State<AuthPage> {
                 .hasMatch(value)) {
           return 'please input a valid contact number';
         }
+        return null;
       },
       keyboardType: TextInputType.number,
       onSaved: (String value) {
@@ -281,9 +288,9 @@ class _AuthPageState extends State<AuthPage> {
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
-          image: _buildBackgroundImage(),
-        ),
+//        decoration: BoxDecoration(
+//          image: _buildBackgroundImage(),
+//        ),
         child: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(0, 75, 0, 0),
           child: Padding(
