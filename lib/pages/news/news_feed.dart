@@ -22,12 +22,18 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
   }
 
   Widget _buildNewsFeed(MainModel model) {
-    Widget content = ListView.builder(
-      itemCount: model.finalNewsList.length,
-      itemBuilder: (BuildContext context, int index) {
-        return NewsCard(model.finalNewsList[index]);
-      },
-    );
+    Widget content = model.finalNewsList.isEmpty
+        ? Container(
+            child: Center(
+              child: Text('No news yet, please add some'),
+            ),
+          )
+        : ListView.builder(
+            itemCount: model.finalNewsList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return NewsCard(model.finalNewsList[index]);
+            },
+          );
     return RefreshIndicator(
       onRefresh: model.fetchNews,
       child: content,
@@ -46,29 +52,29 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
   }
 
   Future<bool> _willPop(BuildContext context) async {
-    if(!(Navigator.canPop(context)))
-     return showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Alert !'),
-              content: Text('Do you realy want to exit from the app ?'),
-              actions: <Widget>[
-                FlatButton(
-                    child: Text('Yes'),
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                    }),
-                FlatButton(
-                    child: Text('No'),
-                    onPressed: () {
-                      Navigator.of(context).pop(false);
-                    })
-              ],
-            );
-          },
-        ) ??
-        false;
+    if (!(Navigator.canPop(context)))
+      return showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Alert !'),
+                content: Text('Do you realy want to exit from the app ?'),
+                actions: <Widget>[
+                  FlatButton(
+                      child: Text('Yes'),
+                      onPressed: () {
+                        Navigator.of(context).pop(true);
+                      }),
+                  FlatButton(
+                      child: Text('No'),
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      })
+                ],
+              );
+            },
+          ) ??
+          false;
     return true;
   }
 

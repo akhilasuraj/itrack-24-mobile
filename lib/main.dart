@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itrack24/pages/complain/complain_edit.dart';
 import 'package:itrack24/pages/contact.dart';
 import 'package:itrack24/pages/news/news_content.dart';
 import 'package:itrack24/pages/news/news_edit.dart';
@@ -9,7 +10,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'scoped-models/main.dart';
 
 import './pages/auth.dart';
-import 'pages/complain/complaints.dart';
+import 'pages/complain/complains_feed.dart';
 
 void main() => runApp(MyApp());
 
@@ -52,7 +53,7 @@ class _MyAppState extends State<MyApp> {
           '/': (BuildContext context) =>
               _isAuthenticated ? NewsFeedPage(_model) : AuthPage(),
           '/complaints': (BuildContext context) =>
-              _isAuthenticated ? ComplaintsPage() : AuthPage(),
+              _isAuthenticated ? ComplainsFeedPage(_model) : AuthPage(),
           '/newsFeed': (BuildContext context) =>
               _isAuthenticated ? NewsFeedPage(_model) : AuthPage(),
           '/NewsEditPage': (BuildContext context) => _isAuthenticated
@@ -63,6 +64,8 @@ class _MyAppState extends State<MyApp> {
               _isAuthenticated ? ContactPage() : AuthPage(),
           '/SettingsMainPage': (BuildContext context) =>
               _isAuthenticated ? SettingsMainPage() : AuthPage(),
+          '/ComplainEditPage': (BuildContext context) =>
+              _isAuthenticated ? ComplainEditPage() : AuthPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {

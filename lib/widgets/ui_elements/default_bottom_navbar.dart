@@ -18,7 +18,7 @@ Widget defaultBottomAppBar(GlobalKey<ScaffoldState> _scaffoldKey) {
               Icons.menu,
               color: Colors.black,
             ),
-          )
+          ),
         ],
       ),
     ),

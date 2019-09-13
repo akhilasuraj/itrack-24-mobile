@@ -6,10 +6,17 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
 
 mixin ComplaintsModel on Model, UtilityModel {
+  List<Complain> _finalComplainList;
+
+  List<Complain> get finalComplainList {
+    return _finalComplainList;
+  }
+
   Future<Null> fetchComplains(int userId) async {
+    isLoading = true;
     final http.Response response = await http.post(
-      '$hostUrl/mycomplains',
-      body: {'user_id': userId},
+      '$hostUrl/users/mycomplains',
+      body: json.encode({'user_id': userId}),
       headers: {'content-type': 'application/json'},
     );
     final List fetchedComplains = json.decode(response.body);
@@ -31,5 +38,7 @@ mixin ComplaintsModel on Model, UtilityModel {
       );
       fetchedComplainsList.add(fetchedComplainElement);
     });
+    _finalComplainList = fetchedComplainsList;
+    isLoading = false;
   }
 }

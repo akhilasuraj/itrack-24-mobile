@@ -38,6 +38,7 @@ class DefaultSideDrawer extends StatelessWidget {
                       title: Text('News Feed'),
                       leading: Icon(Icons.chat),
                       onTap: () {
+                        Navigator.pop(context);
                         Navigator.pushReplacementNamed(context, '/newsFeed');
                       },
                     ),
@@ -45,7 +46,10 @@ class DefaultSideDrawer extends StatelessWidget {
                       title: Text('Complains'),
                       leading: Icon(Icons.hourglass_empty),
                       onTap: () {
-                        Navigator.pushReplacementNamed(context, '/complaints');
+                        Navigator.pop(context);
+//                        Navigator.popUntil(
+//                            context, ModalRoute.withName('/newsFeed'));
+                        Navigator.pushNamed(context, '/complaints');
                       },
                     ),
                     Divider(),
@@ -54,8 +58,9 @@ class DefaultSideDrawer extends StatelessWidget {
                       leading: Icon(Icons.settings),
                       onTap: () {
                         Navigator.pop(context);
-                        Navigator.pushNamed(
-                            context, '/SettingsMainPage');
+//                        Navigator.popUntil(
+//                            context, ModalRoute.withName('/newsFeed'));
+                        Navigator.pushNamed(context, '/SettingsMainPage');
                       },
                     ),
                     ListTile(
@@ -63,6 +68,8 @@ class DefaultSideDrawer extends StatelessWidget {
                       leading: Icon(Icons.call),
                       onTap: () {
                         Navigator.pop(context);
+//                        Navigator.popUntil(
+//                            context, ModalRoute.withName('/newsFeed'));
                         Navigator.pushNamed(context, '/ContactPage');
                       },
                     ),
