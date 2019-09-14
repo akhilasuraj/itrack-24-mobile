@@ -12,7 +12,9 @@ import 'scoped-models/main.dart';
 import './pages/auth.dart';
 import 'pages/complain/complains_feed.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
