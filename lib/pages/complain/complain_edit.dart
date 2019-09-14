@@ -1,10 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:itrack24/pages/complain/image_upload.dart';
+import 'package:itrack24/pages/complain/location_input.dart';
 import 'package:itrack24/scoped-models/main.dart';
 import 'package:itrack24/widgets/ui_elements/default_bottom_navbar.dart';
 import 'package:itrack24/widgets/ui_elements/default_side_drawer.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ComplainEditPage extends StatefulWidget {
+  final MainModel _model;
+
+  ComplainEditPage(this._model);
+
   @override
   _ComplainEditPageState createState() => _ComplainEditPageState();
 }
@@ -84,13 +93,17 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(width: 1.0,color: Colors.transparent),
+          border: Border.all(width: 1.0, color: Colors.transparent),
           borderRadius: BorderRadius.circular(25.0),
         ),
         padding: EdgeInsets.all(15.0),
         child: Text(
           _selectedComplainCategory ?? 'Select a category',
-          style: TextStyle(fontSize: 16.0, color: Colors.black54),
+          style: TextStyle(
+              fontSize: 16.0,
+              color: _selectedComplainCategory == null
+                  ? Colors.black54
+                  : Colors.black),
         ),
       ),
     );
@@ -108,7 +121,15 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
         child: Column(
           children: <Widget>[
             _buildCategoryText(),
-            !_isHidden ? _buildCategorySelectionList() : Container(),
+            _isHidden
+                ? Container()
+                : Divider(
+                    color: Colors.black,
+                    indent: 20.0,
+                    endIndent: 20.0,
+                  ),
+            _buildCategorySelectionList(),
+            //!_isHidden ? _buildCategorySelectionList() : Container(),
           ],
         ),
       ),
@@ -116,8 +137,9 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
   }
 
   Widget _buildCategorySelectionList() {
-    return Container(
-      height: 300.0,
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 400),
+      height: _isHidden ? 0.0 : 300.0,
       child: Scrollbar(
         child: ListView.builder(
           itemCount: _complainHeadingList.length,
@@ -125,7 +147,7 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
             return Column(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0),
+                  padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 0),
                   child: Row(
                     children: <Widget>[
                       Text(
@@ -138,37 +160,41 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
                   ),
                 ),
                 ListView.builder(
-                    physics: ClampingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: _complainCategoryList[x].length,
-                    itemBuilder: (BuildContext context, int y) {
-                      return FlatButton(
-                          onPressed: () {
-                            setState(() {
-                              _selectedComplainCategory =
-                                  _complainCategoryList[x][y];
-                              _isHidden = true;
-                            });
-                          },
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                          child: Row(
-                            children: <Widget>[
-                              SizedBox(
-                                width: 15.0,
-                              ),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                size: 10.0,
-                              ),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              Text(_complainCategoryList[x][y]),
-                              Expanded(child: Column())
-                            ],
-                          ));
-                    })
+                  physics: ClampingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: _complainCategoryList[x].length,
+                  itemBuilder: (BuildContext context, int y) {
+                    return FlatButton(
+                      onPressed: () {
+                        setState(() {
+                          _selectedComplainCategory =
+                              _complainCategoryList[x][y];
+                          _isHidden = true;
+                        });
+                      },
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      child: Row(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 15.0,
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 10.0,
+                          ),
+                          SizedBox(
+                            width: 5.0,
+                          ),
+                          Text(_complainCategoryList[x][y]),
+                          Expanded(child: Container())
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: 10.0,
+                )
               ],
             );
           },
@@ -180,7 +206,7 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.amber,
+      // backgroundColor: Colors.amber,
       key: _scaffoldKey,
       drawer: DefaultSideDrawer(),
       body: _buildBody(),
@@ -231,6 +257,44 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
                 height: 10.0,
               ),
               _buildDescriptionFormField(),
+              SizedBox(
+                height: 10.0,
+              ),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Image :',
+                    style:
+                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
+                  ),
+                  Expanded(
+                    child: Container(),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              ImageUploadWindow(widget._model),
+              SizedBox(
+                height: 10.0,
+              ),
+              Row(
+                children: <Widget>[
+                  Text(
+                    'Location :',
+                    style:
+                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
+                  ),
+                  Expanded(
+                    child: Container(),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              LocationInputWindow(),
             ],
           )),
     );
@@ -247,5 +311,12 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
         );
       },
     );
+  }
+
+
+  @override
+  void dispose() {
+    widget._model.pickedImage = null;
+    super.dispose();
   }
 }

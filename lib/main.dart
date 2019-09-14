@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
           '/SettingsMainPage': (BuildContext context) =>
               _isAuthenticated ? SettingsMainPage() : AuthPage(),
           '/ComplainEditPage': (BuildContext context) =>
-              _isAuthenticated ? ComplainEditPage() : AuthPage(),
+              _isAuthenticated ? ComplainEditPage(_model) : AuthPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {
