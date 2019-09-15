@@ -177,6 +177,6 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
   @override
   void initState() {
     super.initState();
-    _getUserLocation();
+    _getUserLocation(); //live location
   }
 }
