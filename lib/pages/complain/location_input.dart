@@ -133,10 +133,13 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
         ),
         child: AspectRatio(
           aspectRatio: 16 / 9,
-          child: Image.network(
-            mapImageUri.toString(),
+          child: FadeInImage(
+            image: NetworkImage(
+              mapImageUri.toString(),
+            ),
             fit: BoxFit.cover,
             alignment: FractionalOffset.center,
+            placeholder: AssetImage('assets/android.jpg'),
           ),
         ),
       ),
@@ -176,5 +179,4 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
     super.initState();
     _getUserLocation();
   }
-
 }
