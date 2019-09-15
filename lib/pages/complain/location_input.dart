@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:itrack24/models/location.dart';
+import 'package:location/location.dart' as geoloc;
 
 class LocationInputWindow extends StatefulWidget {
   @override
@@ -73,30 +74,30 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
     });
   }
 
-//  void _getUserLocation() async {
-//    final location = geoloc.Location();
-//    final userLocation = await location.getLocation();
-//    print(userLocation);
-//   // _cordsToAddress(userLocation['latitude'],userLocation['longitude']);
-//  }
+  void _getUserLocation() async {
+    final location = geoloc.Location();
+    final userLocation = await location.getLocation();
+    print(userLocation.latitude);
+    print(userLocation.longitude);
+    _cordsToAddress(userLocation.latitude, userLocation.longitude);
+  }
 
   void _cordsToAddress(double lat, double lng) async {
     geocodeUri = Uri.https(
       'maps.googleapis.com',
       '/maps/api/geocode/json',
-      {'latlng': '', 'key': 'AIzaSyBjTh5fhWEMqiDEtMYmmQyVfNYdvNcB39A'},
+      {'latlng': '$lat,$lng', 'key': 'AIzaSyBjTh5fhWEMqiDEtMYmmQyVfNYdvNcB39A'},
     );
 
     final http.Response response = await http.get(geocodeUri.toString());
     final decodedResponse = json.decode(response.body);
     final formattedAddress = decodedResponse['results'][0]['formatted_address'];
-    final cords = decodedResponse['results'][0]['geometry']['location'];
 
     setState(() {
       _currentLocation = Location(
         address: formattedAddress,
-        lat: cords['lat'],
-        lng: cords['lng'],
+        lat: lat,
+        lng: lng,
       );
       _locationInputController.text = _currentLocation.address;
       _buildStaticMap();
@@ -159,7 +160,7 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
               child: IconButton(
                 icon: Icon(Icons.my_location),
                 onPressed: () {
-               //   _getUserLocation();
+                  _getUserLocation();
                   print('pressed');
                 },
               ),
@@ -169,4 +170,11 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
       ],
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserLocation();
+  }
+
 }
