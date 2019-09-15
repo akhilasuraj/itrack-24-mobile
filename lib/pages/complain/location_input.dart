@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:itrack24/models/location.dart';
 
 class LocationInputWindow extends StatefulWidget {
   @override
@@ -9,6 +10,7 @@ class LocationInputWindow extends StatefulWidget {
 }
 
 class _LocationInputWindowState extends State<LocationInputWindow> {
+  Location _currentLocation;
   Uri mapImageUri;
   Uri geocodeUri;
   final TextEditingController _locationInputController =
@@ -16,15 +18,15 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
 
   Widget _buildLocationInputFormField() {
     return TextFormField(
+      maxLines: null,
       controller: _locationInputController,
       textAlign: TextAlign.center,
       decoration: InputDecoration(
         suffixIcon: IconButton(
           icon: Icon(Icons.arrow_forward_ios),
           onPressed: () {
-            setState(() {
-              _updateLocation();
-            });
+            FocusScope.of(context).requestFocus(FocusNode());
+            _addressToCords(_locationInputController.text);
           },
         ),
         fillColor: Colors.white,
@@ -44,8 +46,8 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
     );
   }
 
-  void _buildStaticMap(String address) async {
-    if (address.length < 2) {
+  void _addressToCords(String address) async {
+    if (address.isEmpty) {
       return;
     }
 
@@ -54,47 +56,87 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
       '/maps/api/geocode/json',
       {'address': address, 'key': 'AIzaSyBjTh5fhWEMqiDEtMYmmQyVfNYdvNcB39A'},
     );
-    print(geocodeUri.toString());
 
     final http.Response response = await http.get(geocodeUri.toString());
     final decodedResponse = json.decode(response.body);
-    print(decodedResponse);
     final formattedAddress = decodedResponse['results'][0]['formatted_address'];
-    final coords = decodedResponse['results'][0]['geometry']['location'];
+    final cords = decodedResponse['results'][0]['geometry']['location'];
 
     setState(() {
-      _locationInputController.text = formattedAddress;
+      _currentLocation = Location(
+        address: formattedAddress,
+        lat: cords['lat'],
+        lng: cords['lng'],
+      );
+      _locationInputController.text = _currentLocation.address;
+      _buildStaticMap();
     });
+  }
 
+//  void _getUserLocation() async {
+//    final location = geoloc.Location();
+//    final userLocation = await location.getLocation();
+//    print(userLocation);
+//   // _cordsToAddress(userLocation['latitude'],userLocation['longitude']);
+//  }
+
+  void _cordsToAddress(double lat, double lng) async {
+    geocodeUri = Uri.https(
+      'maps.googleapis.com',
+      '/maps/api/geocode/json',
+      {'latlng': '', 'key': 'AIzaSyBjTh5fhWEMqiDEtMYmmQyVfNYdvNcB39A'},
+    );
+
+    final http.Response response = await http.get(geocodeUri.toString());
+    final decodedResponse = json.decode(response.body);
+    final formattedAddress = decodedResponse['results'][0]['formatted_address'];
+    final cords = decodedResponse['results'][0]['geometry']['location'];
+
+    setState(() {
+      _currentLocation = Location(
+        address: formattedAddress,
+        lat: cords['lat'],
+        lng: cords['lng'],
+      );
+      _locationInputController.text = _currentLocation.address;
+      _buildStaticMap();
+    });
+  }
+
+  void _buildStaticMap() {
     mapImageUri = Uri.https(
       'maps.googleapis.com',
       '/maps/api/staticmap',
       {
         'size': '1280x720',
-        'zoom': '18',
-        'center': '${coords['lat']},${coords['lng']}',
+        'zoom': '16',
+        'markers':
+            'color:0xd20000|label:default|${_currentLocation.lat.toString()},${_currentLocation.lng.toString()}',
+        'center':
+            '${_currentLocation.lat.toString()},${_currentLocation.lng.toString()}',
         'maptype': 'roadmap',
         'key': 'AIzaSyBjTh5fhWEMqiDEtMYmmQyVfNYdvNcB39A'
       },
     );
   }
 
-  void _updateLocation() {
-    print(_locationInputController.text);
-    _buildStaticMap(_locationInputController.text);
-  }
-
   Widget _buildCapturedMapImage() {
-    return ClipRRect(
-      borderRadius: BorderRadius.all(
-        Radius.circular(8.0),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(width: 1.0),
+        borderRadius: BorderRadius.circular(8.0),
       ),
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Image.network(
-          mapImageUri.toString(),
-          fit: BoxFit.cover,
-          alignment: FractionalOffset.center,
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8.0),
+        ),
+        child: AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Image.network(
+            mapImageUri.toString(),
+            fit: BoxFit.cover,
+            alignment: FractionalOffset.center,
+          ),
         ),
       ),
     );
@@ -108,7 +150,22 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
         SizedBox(
           height: 10.0,
         ),
-        _buildCapturedMapImage(),
+        Stack(
+          children: <Widget>[
+            _buildCapturedMapImage(),
+            Positioned(
+              bottom: 5,
+              right: 5,
+              child: IconButton(
+                icon: Icon(Icons.my_location),
+                onPressed: () {
+               //   _getUserLocation();
+                  print('pressed');
+                },
+              ),
+            ),
+          ],
+        )
       ],
     );
   }

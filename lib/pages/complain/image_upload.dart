@@ -103,16 +103,22 @@ class _ImageUploadWindowState extends State<ImageUploadWindow> {
   }
 
   Widget _buildCapturedImage() {
-    return ClipRRect(
-      borderRadius: BorderRadius.all(
-        Radius.circular(8.0),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(width: 1.0),
+        borderRadius: BorderRadius.circular(8.0),
       ),
-      child: AspectRatio(
-        aspectRatio: 16 / 8,
-        child: Image.file(
-          widget._model.pickedImage,
-          fit: BoxFit.cover,
-          alignment: FractionalOffset.center,
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(
+          Radius.circular(7.0),
+        ),
+        child: AspectRatio(
+          aspectRatio: 16 / 8,
+          child: Image.file(
+            widget._model.pickedImage,
+            fit: BoxFit.cover,
+            alignment: FractionalOffset.center,
+          ),
         ),
       ),
     );

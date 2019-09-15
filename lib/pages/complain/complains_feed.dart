@@ -80,6 +80,7 @@ class _ComplainsFeedPageState extends State<ComplainsFeedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      extendBody: true,
       drawer: DefaultSideDrawer(),
       body: ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {

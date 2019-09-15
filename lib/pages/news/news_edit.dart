@@ -270,6 +270,7 @@ class _NewsEditPageState extends State<NewsEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      extendBody: true,
       drawer: DefaultSideDrawer(),
       body: _buildNewsSubmitFormField(),
       floatingActionButton: _buildFloatingActionButton(),

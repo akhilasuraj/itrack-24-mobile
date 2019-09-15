@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:itrack24/pages/complain/image_upload.dart';
@@ -7,7 +6,6 @@ import 'package:itrack24/scoped-models/main.dart';
 import 'package:itrack24/widgets/ui_elements/default_bottom_navbar.dart';
 import 'package:itrack24/widgets/ui_elements/default_side_drawer.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ComplainEditPage extends StatefulWidget {
   final MainModel _model;
@@ -21,7 +19,7 @@ class ComplainEditPage extends StatefulWidget {
 class _ComplainEditPageState extends State<ComplainEditPage> {
   bool _isHidden = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+ // final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   TextEditingController _descriptionTextController =
       new TextEditingController();
   String _selectedComplainCategory;
@@ -98,7 +96,7 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
         ),
         padding: EdgeInsets.all(15.0),
         child: Text(
-          _selectedComplainCategory ?? 'Select a category',
+          _selectedComplainCategory ?? 'Tap to Select a category',
           style: TextStyle(
               fontSize: 16.0,
               color: _selectedComplainCategory == null
@@ -208,6 +206,7 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
     return Scaffold(
       // backgroundColor: Colors.amber,
       key: _scaffoldKey,
+      extendBody: true,
       drawer: DefaultSideDrawer(),
       body: _buildBody(),
       floatingActionButton: _buildFloatingActionButton(),
@@ -219,7 +218,7 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
   Widget _buildBody() {
     return SingleChildScrollView(
       child: Container(
-          padding: EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 10.0),
+          padding: EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 60.0),
           child: Column(
             children: <Widget>[
               Row(
