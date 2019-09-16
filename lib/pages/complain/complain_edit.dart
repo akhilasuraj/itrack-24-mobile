@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:itrack24/pages/complain/image_upload.dart';
 import 'package:itrack24/pages/complain/location_input.dart';
@@ -19,7 +18,6 @@ class ComplainEditPage extends StatefulWidget {
 class _ComplainEditPageState extends State<ComplainEditPage> {
   bool _isHidden = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
- // final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   TextEditingController _descriptionTextController =
       new TextEditingController();
   String _selectedComplainCategory;
@@ -71,12 +69,6 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
         filled: true,
         hintText: 'Complain Description',
       ),
-      validator: (String value) {
-        if (value.isEmpty) {
-          return 'Description Cannot be empty';
-        }
-        return null;
-      },
     );
   }
 
@@ -299,11 +291,36 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
     );
   }
 
+  final SnackBar snackBar = SnackBar(
+    behavior: SnackBarBehavior.floating,
+    content: Text('Please fill all the fields !'),
+    action: SnackBarAction(
+      label: 'OK',
+      onPressed: () {
+        // Some code to undo the change.
+      },
+    ),
+  );
+
+  // Find the Scaffold in the widget tree and use
+  // it to show a SnackBar.
+
   Widget _buildFloatingActionButton() {
     return ScopedModelDescendant(
       builder: (BuildContext context, Widget child, MainModel model) {
         return FloatingActionButton(
-          onPressed: () async {},
+          onPressed: () async {
+            Scaffold.of(context).hideCurrentSnackBar();
+            if (_descriptionTextController.text.isEmpty ||
+                _descriptionTextController.text == null ||
+                _selectedComplainCategory.isEmpty ||
+                _selectedComplainCategory == null ||
+                widget._model.pickedImage == null) {
+
+              Scaffold.of(context).showSnackBar(snackBar);
+              return;
+            }
+          },
           tooltip: 'Submit',
           backgroundColor: Colors.black87,
           child: Icon(Icons.check),
@@ -311,7 +328,6 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
       },
     );
   }
-
 
   @override
   void dispose() {

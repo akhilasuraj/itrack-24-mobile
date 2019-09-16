@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:itrack24/models/location.dart';
-import 'package:location/location.dart' as geoloc;
+import 'package:location/location.dart' as geoLoc;
 
 class LocationInputWindow extends StatefulWidget {
   @override
@@ -14,6 +14,11 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
   Location _currentLocation;
   Uri mapImageUri;
   Uri geocodeUri;
+
+  Location get currentLocation {
+    return _currentLocation;
+  }
+
   final TextEditingController _locationInputController =
       TextEditingController();
 
@@ -75,7 +80,7 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
   }
 
   void _getUserLocation() async {
-    final location = geoloc.Location();
+    final location = geoLoc.Location();
     final userLocation = await location.getLocation();
     print(userLocation.latitude);
     print(userLocation.longitude);
@@ -159,7 +164,7 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
             _buildCapturedMapImage(),
             Positioned(
               bottom: 5,
-              right: 5,
+              left: 5,
               child: IconButton(
                 icon: Icon(Icons.my_location),
                 onPressed: () {
@@ -178,5 +183,12 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
   void initState() {
     super.initState();
     _getUserLocation(); //live location
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _currentLocation = null;
+    _locationInputController.dispose();
   }
 }
