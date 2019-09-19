@@ -84,9 +84,13 @@ class _NewsEditPageState extends State<NewsEditPage> {
   Widget _buildImageUploadWindow() {
     return GestureDetector(
         onTap: () => _buildImagePickerBottomSheet(context),
-        child: widget._model.pickedImage == null
-            ? _buildImageUploadButton()
-            : _buildCapturedImage());
+        child: widget.isEdit
+            ? widget._model.pickedImage == null
+                ? _buildNetworkImage()
+                : _buildCapturedImage()
+            : widget._model.pickedImage == null
+                ? _buildImageUploadButton()
+                : _buildCapturedImage());
   }
 
   Widget _buildImageUploadButton() {
@@ -110,6 +114,22 @@ class _NewsEditPageState extends State<NewsEditPage> {
             style: TextStyle(fontSize: 17.0),
           )
         ],
+      ),
+    );
+  }
+
+  Widget _buildNetworkImage() {
+    return ClipRRect(
+      borderRadius: BorderRadius.all(
+        Radius.circular(8.0),
+      ),
+      child: AspectRatio(
+        aspectRatio: 16 / 8,
+        child: Image.network(
+          '${widget._model.hostUrl}/${widget.editableNews.imageUrl}',
+          fit: BoxFit.cover,
+          alignment: FractionalOffset.center,
+        ),
       ),
     );
   }

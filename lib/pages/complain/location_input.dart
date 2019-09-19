@@ -3,21 +3,21 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:itrack24/models/location.dart';
+import 'package:itrack24/scoped-models/main.dart';
 import 'package:location/location.dart' as geoLoc;
 
 class LocationInputWindow extends StatefulWidget {
+  final MainModel _model;
+
+  LocationInputWindow(this._model);
+
   @override
   _LocationInputWindowState createState() => _LocationInputWindowState();
 }
 
 class _LocationInputWindowState extends State<LocationInputWindow> {
-  Location _currentLocation;
   Uri mapImageUri;
   Uri geocodeUri;
-
-  Location get currentLocation {
-    return _currentLocation;
-  }
 
   final TextEditingController _locationInputController =
       TextEditingController();
@@ -69,12 +69,12 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
     final cords = decodedResponse['results'][0]['geometry']['location'];
 
     setState(() {
-      _currentLocation = Location(
+      widget._model.currentLocation = Location(
         address: formattedAddress,
         lat: cords['lat'],
         lng: cords['lng'],
       );
-      _locationInputController.text = _currentLocation.address;
+      _locationInputController.text = widget._model.currentLocation.address;
       _buildStaticMap();
     });
   }
@@ -99,12 +99,12 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
     final formattedAddress = decodedResponse['results'][0]['formatted_address'];
 
     setState(() {
-      _currentLocation = Location(
+      widget._model.currentLocation = Location(
         address: formattedAddress,
         lat: lat,
         lng: lng,
       );
-      _locationInputController.text = _currentLocation.address;
+      _locationInputController.text = widget._model.currentLocation.address;
       _buildStaticMap();
     });
   }
@@ -117,9 +117,9 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
         'size': '1280x720',
         'zoom': '16',
         'markers':
-            'color:0xd20000|label:default|${_currentLocation.lat.toString()},${_currentLocation.lng.toString()}',
+            'color:0xd20000|label:default|${widget._model.currentLocation.lat.toString()},${widget._model.currentLocation.lng.toString()}',
         'center':
-            '${_currentLocation.lat.toString()},${_currentLocation.lng.toString()}',
+            '${widget._model.currentLocation.lat.toString()},${widget._model.currentLocation.lng.toString()}',
         'maptype': 'roadmap',
         'key': 'AIzaSyBjTh5fhWEMqiDEtMYmmQyVfNYdvNcB39A'
       },
@@ -188,7 +188,7 @@ class _LocationInputWindowState extends State<LocationInputWindow> {
   @override
   void dispose() {
     super.dispose();
-    _currentLocation = null;
+    widget._model.currentLocation = null;
     _locationInputController.dispose();
   }
 }

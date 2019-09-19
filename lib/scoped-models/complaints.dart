@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:itrack24/models/complain.dart';
+import 'package:itrack24/scoped-models/image.dart';
+import 'package:itrack24/scoped-models/user.dart';
 import 'package:itrack24/scoped-models/utility.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
 
-mixin ComplaintsModel on Model, UtilityModel {
+mixin ComplaintsModel on Model, UtilityModel, ImageModel, UserModel{
   List<Complain> _finalComplainList;
 
   List<Complain> get finalComplainList {
@@ -41,4 +43,28 @@ mixin ComplaintsModel on Model, UtilityModel {
     _finalComplainList = fetchedComplainsList;
     isLoading = false;
   }
+
+  Future<Null> submitComplain(Complain complain) async {
+    isLoading = true;
+    await uploadImage('/users/upload-image','compImg');
+    final Map<String, dynamic> _complainDetails = {
+      'user_id': user.userId,
+      'category': complain.category,
+      'description': complain.description,
+      'longitude': complain.longitude,
+      'latitude': complain.latitude,
+      'complainImg': null,
+    };
+    final http.Response response = await http.post(
+      '$hostUrl/users/complain',
+      body: json.encode(_complainDetails),
+      headers: {'content-type': 'application/json'},
+    );
+    isLoading = false;
+    final Map<String, dynamic> responseData = json.decode(response.body);
+    print(responseData);
+  }
 }
+
+
+

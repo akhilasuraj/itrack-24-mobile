@@ -10,16 +10,7 @@ import 'package:http/http.dart' as http;
 mixin NewsModel on Model, UtilityModel, UserModel,ImageModel {
   List<News> _finalNewsList = List();
   News _selectedNews;
-  bool _isEdit;
 
-  bool get isEdit {
-    return _isEdit;
-  }
-
-  set isEdit(bool stat) {
-    _isEdit = stat;
-    notifyListeners();
-  }
 
   News get selectedNews {
     return _selectedNews;
@@ -61,7 +52,7 @@ mixin NewsModel on Model, UtilityModel, UserModel,ImageModel {
 
   Future<Null> submitNews(String newsTitle, String newsContent) async {
     isLoading = true;
-    await uploadImage('/users/addimage');
+    await uploadImage('/users/addimage','postImg');
     final Map<String, dynamic> _newsDetails = {
       'UserID': user.userId,
       'FirstName': user.firstName,

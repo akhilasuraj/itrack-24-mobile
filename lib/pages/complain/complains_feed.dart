@@ -68,7 +68,7 @@ class _ComplainsFeedPageState extends State<ComplainsFeedPage> {
     Widget content = ListView.builder(
         itemCount: model.finalComplainList.length,
         itemBuilder: (BuildContext context, int index) {
-          return ComplainListTile(model.finalComplainList[index]);
+          return ComplainListTile(model.finalComplainList[index], model);
         });
     return RefreshIndicator(
       child: content,

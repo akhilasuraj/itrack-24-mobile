@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:itrack24/models/complain.dart';
+import 'package:itrack24/scoped-models/main.dart';
 
 class ComplainListTile extends StatelessWidget {
   final Complain complain;
+  final MainModel _model;
 
-  ComplainListTile(this.complain);
+  ComplainListTile(this.complain, this._model);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(complain.complainImage),
+        backgroundImage:
+            NetworkImage('${_model.hostUrl}/${complain.complainImage}'),
       ),
       title: Text(complain.category),
       subtitle: Text(complain.description),

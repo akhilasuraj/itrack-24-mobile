@@ -20,11 +20,11 @@ mixin ImageModel on Model, UtilityModel {
     return _pickedImage;
   }
 
-  Future<Null> uploadImage(String route) async {
+  Future<Null> uploadImage(String route, String path) async {
     final mimeTypeData = lookupMimeType(_pickedImage.path).split('/');
     final imageUploadRequest =
-        http.MultipartRequest('POST', Uri.parse('$hostUrl$route'));
-    final file = await http.MultipartFile.fromPath('postImg', _pickedImage.path,
+    http.MultipartRequest('POST', Uri.parse('$hostUrl$route'));
+    final file = await http.MultipartFile.fromPath(path, _pickedImage.path,
         contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
     imageUploadRequest.files.add(file);
     try {

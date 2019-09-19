@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itrack24/models/complain.dart';
 import 'package:itrack24/pages/complain/image_upload.dart';
 import 'package:itrack24/pages/complain/location_input.dart';
 import 'package:itrack24/scoped-models/main.dart';
@@ -15,11 +16,22 @@ class ComplainEditPage extends StatefulWidget {
   _ComplainEditPageState createState() => _ComplainEditPageState();
 }
 
+enum LocationMode {
+  Map,
+  Address,
+}
+
 class _ComplainEditPageState extends State<ComplainEditPage> {
+  LocationMode _locationMode = LocationMode.Address;
+
   bool _isHidden = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   TextEditingController _descriptionTextController =
       new TextEditingController();
+  TextEditingController _address1TextController = new TextEditingController();
+  TextEditingController _address2TextController = new TextEditingController();
+  TextEditingController _districtTextController = new TextEditingController();
+
   String _selectedComplainCategory;
   List<String> _complainHeadingList = [
     'Emergency on street',
@@ -193,6 +205,61 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
     );
   }
 
+  Widget _buildAddressInputForm() {
+    return Column(
+      children: <Widget>[
+        TextFormField(
+          controller: _address1TextController,
+          textAlign: TextAlign.center,
+          maxLines: null,
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            border: new OutlineInputBorder(
+              borderRadius: new BorderRadius.circular(25.0),
+              borderSide: new BorderSide(),
+            ),
+            filled: true,
+            hintText: 'Address line 1',
+          ),
+        ),
+        SizedBox(
+          height: 10.0,
+        ),
+        TextFormField(
+          controller: _address2TextController,
+          textAlign: TextAlign.center,
+          maxLines: null,
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            border: new OutlineInputBorder(
+              borderRadius: new BorderRadius.circular(25.0),
+              borderSide: new BorderSide(),
+            ),
+            filled: true,
+            hintText: 'Address line 2',
+          ),
+        ),
+        SizedBox(
+          height: 10.0,
+        ),
+        TextFormField(
+          controller: _districtTextController,
+          textAlign: TextAlign.center,
+          maxLines: null,
+          decoration: InputDecoration(
+            fillColor: Colors.white,
+            border: new OutlineInputBorder(
+              borderRadius: new BorderRadius.circular(25.0),
+              borderSide: new BorderSide(),
+            ),
+            filled: true,
+            hintText: 'District',
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -285,7 +352,9 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
               SizedBox(
                 height: 10.0,
               ),
-              LocationInputWindow(),
+              _locationMode == LocationMode.Map
+                  ? LocationInputWindow(widget._model)
+                  : _buildAddressInputForm(),
             ],
           )),
     );
@@ -316,10 +385,36 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
                 _selectedComplainCategory.isEmpty ||
                 _selectedComplainCategory == null ||
                 widget._model.pickedImage == null) {
-
               Scaffold.of(context).showSnackBar(snackBar);
               return;
             }
+            if (_locationMode == LocationMode.Address) {
+              if (_address1TextController.text.isEmpty ||
+                  _address1TextController.text == null ||
+                  _address2TextController.text.isEmpty ||
+                  _address2TextController.text == null ||
+                  _districtTextController.text.isEmpty ||
+                  _districtTextController.text == null) {
+                Scaffold.of(context).showSnackBar(snackBar);
+                return;
+              }
+            }
+            Complain generatedComplain = Complain(
+              userId: model.user.userId,
+              category: _selectedComplainCategory,
+              description: _descriptionTextController.text,
+              longitude: widget._model.currentLocation.lng,
+              latitude: widget._model.currentLocation.lat,
+              time: null,
+              date: null,
+              district: null,
+              address2: null,
+              complainImage: null,
+              complainId: null,
+              address1: null,
+            );
+            await model.submitComplain(generatedComplain);
+            Navigator.pushReplacementNamed(context, '/complaints');
           },
           tooltip: 'Submit',
           backgroundColor: Colors.black87,
