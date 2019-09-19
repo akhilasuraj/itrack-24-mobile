@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itrack24/pages/complain/complain_content.dart';
 import 'package:itrack24/pages/complain/complain_edit.dart';
 import 'package:itrack24/pages/contact.dart';
 import 'package:itrack24/pages/news/news_content.dart';
@@ -68,6 +69,8 @@ class _MyAppState extends State<MyApp> {
               _isAuthenticated ? SettingsMainPage() : AuthPage(),
           '/ComplainEditPage': (BuildContext context) =>
               _isAuthenticated ? ComplainEditPage(_model) : AuthPage(),
+          '/ComplainContent': (BuildContext context) =>
+          _isAuthenticated ? ComplainContent() : AuthPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {

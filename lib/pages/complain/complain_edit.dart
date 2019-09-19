@@ -3,6 +3,7 @@ import 'package:itrack24/models/complain.dart';
 import 'package:itrack24/pages/complain/image_upload.dart';
 import 'package:itrack24/pages/complain/location_input.dart';
 import 'package:itrack24/scoped-models/main.dart';
+import 'package:itrack24/widgets/ui_elements/date_time.dart';
 import 'package:itrack24/widgets/ui_elements/default_bottom_navbar.dart';
 import 'package:itrack24/widgets/ui_elements/default_side_drawer.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -22,7 +23,7 @@ enum LocationMode {
 }
 
 class _ComplainEditPageState extends State<ComplainEditPage> {
-  LocationMode _locationMode = LocationMode.Address;
+  LocationMode _locationMode = LocationMode.Map;
 
   bool _isHidden = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -260,6 +261,70 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
     );
   }
 
+  Widget _buildLocationModeButtonRow() {
+    return ClipRRect(
+      borderRadius: BorderRadius.all(
+        Radius.circular(25.0),
+      ),
+      child: Stack(
+        children: <Widget>[
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 300),
+            left: _locationMode == LocationMode.Map ? 0 : MediaQuery.of(context).size.width/2 -25,
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(
+                Radius.circular(25.0),
+              ),
+              child: Container(
+                width: MediaQuery.of(context).size.width / 2+ 15,
+                height: 50,
+                color: Colors.amber,
+              ),
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(width: 1.0, color: Colors.black),
+              borderRadius: BorderRadius.circular(25.0),
+              color: Colors.transparent,
+            ),
+            height: 50,
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                _buildLocationModeButton('Map', LocationMode.Map),
+                _buildLocationModeButton('Address', LocationMode.Address),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLocationModeButton(String title, LocationMode mode) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _locationMode = mode;
+        });
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width / 2 - 12,
+        height: 48,
+        color: Colors.transparent,
+        child: Center(
+            child: Text(
+          title,
+          style: TextStyle(color: _locationMode == mode ? Colors.black : Colors.grey,
+              fontSize: _locationMode == mode ? 22.0 : 14.0,
+              fontWeight: FontWeight.w700),
+        )),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -275,10 +340,11 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
   }
 
   Widget _buildBody() {
-    return SingleChildScrollView(
-      child: Container(
-          padding: EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 60.0),
-          child: Column(
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      padding: EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 10.0),
+      child: SingleChildScrollView(
+        child: Column(
             children: <Widget>[
               Row(
                 children: <Widget>[
@@ -340,6 +406,25 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
               Row(
                 children: <Widget>[
                   Text(
+                    'Date and Time :',
+                    style:
+                    TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
+                  ),
+                  Expanded(
+                    child: Container(),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 10.0,
+              ),
+              DateTimePicker(),
+              SizedBox(
+                height: 10.0,
+              ),
+              Row(
+                children: <Widget>[
+                  Text(
                     'Location :',
                     style:
                         TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
@@ -352,11 +437,19 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
               SizedBox(
                 height: 10.0,
               ),
+              _buildLocationModeButtonRow(),
+              SizedBox(
+                height: 10.0,
+              ),
               _locationMode == LocationMode.Map
                   ? LocationInputWindow(widget._model)
                   : _buildAddressInputForm(),
+              SizedBox(
+                height: 50.0,
+              ),
             ],
-          )),
+          ),
+      ),
     );
   }
 
@@ -370,9 +463,6 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
       },
     ),
   );
-
-  // Find the Scaffold in the widget tree and use
-  // it to show a SnackBar.
 
   Widget _buildFloatingActionButton() {
     return ScopedModelDescendant(
@@ -403,15 +493,15 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
               userId: model.user.userId,
               category: _selectedComplainCategory,
               description: _descriptionTextController.text,
-              longitude: widget._model.currentLocation.lng,
-              latitude: widget._model.currentLocation.lat,
+              longitude:_locationMode == LocationMode.Map ? widget._model.currentLocation.lng : null,
+              latitude: _locationMode == LocationMode.Map ? widget._model.currentLocation.lat : null,
               time: null,
               date: null,
-              district: null,
-              address2: null,
+              district: _districtTextController.text,
+              address2: _address2TextController.text,
               complainImage: null,
               complainId: null,
-              address1: null,
+              address1: _address1TextController.text,
             );
             await model.submitComplain(generatedComplain);
             Navigator.pushReplacementNamed(context, '/complaints');

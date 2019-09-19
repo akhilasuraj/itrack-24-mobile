@@ -54,6 +54,9 @@ mixin ComplaintsModel on Model, UtilityModel, ImageModel, UserModel{
       'longitude': complain.longitude,
       'latitude': complain.latitude,
       'complainImg': null,
+      'address1': complain.address1,
+      'address2': complain.address2,
+      'district': complain.district,
     };
     final http.Response response = await http.post(
       '$hostUrl/users/complain',

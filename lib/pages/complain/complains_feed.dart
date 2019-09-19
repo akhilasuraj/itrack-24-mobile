@@ -65,11 +65,21 @@ class _ComplainsFeedPageState extends State<ComplainsFeedPage> {
   }
 
   Widget _buildComplainFeed(MainModel model) {
-    Widget content = ListView.builder(
-        itemCount: model.finalComplainList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return ComplainListTile(model.finalComplainList[index], model);
-        });
+    Widget content = model.finalComplainList.length == 0
+        ? Center(
+            child: Text(
+              'No complains added, Please add some',
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          )
+        : ListView.builder(
+            itemCount: model.finalComplainList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ComplainListTile(model.finalComplainList[index], model);
+            });
     return RefreshIndicator(
       child: content,
       onRefresh: () => model.fetchComplains(model.user.userId),
