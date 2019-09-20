@@ -69,8 +69,6 @@ class _MyAppState extends State<MyApp> {
               _isAuthenticated ? SettingsMainPage() : AuthPage(),
           '/ComplainEditPage': (BuildContext context) =>
               _isAuthenticated ? ComplainEditPage(_model) : AuthPage(),
-          '/ComplainContent': (BuildContext context) =>
-          _isAuthenticated ? ComplainContent() : AuthPage(),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {
@@ -85,6 +83,14 @@ class _MyAppState extends State<MyApp> {
             return MaterialPageRoute(
               builder: (BuildContext context) => _isAuthenticated
                   ? NewsContentPage(newsId, _model)
+                  : AuthPage(),
+            );
+          }
+          if (pathElements[1] == 'ComplainContent') {
+            final int compId = int.parse(pathElements[2]);
+            return MaterialPageRoute(
+              builder: (BuildContext context) => _isAuthenticated
+                  ? ComplainContentPage(compId, _model)
                   : AuthPage(),
             );
           }

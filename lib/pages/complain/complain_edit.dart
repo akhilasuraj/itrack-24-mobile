@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itrack24/models/complain.dart';
 import 'package:itrack24/widgets/complains/image_upload.dart';
-import 'package:itrack24/widgets/complains/location_input.dart';
+import 'package:itrack24/widgets/utils/location_input_form.dart';
 import 'package:itrack24/scoped-models/main.dart';
 import 'package:itrack24/widgets/ui_elements/date_time.dart';
 import 'package:itrack24/widgets/ui_elements/default_bottom_navbar.dart';
@@ -442,7 +442,7 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
                 height: 10.0,
               ),
               _locationMode == LocationMode.Map
-                  ? LocationInputWindow(widget._model)
+                  ? LocationInputFormField(widget._model)
                   : _buildAddressInputForm(),
               SizedBox(
                 height: 50.0,

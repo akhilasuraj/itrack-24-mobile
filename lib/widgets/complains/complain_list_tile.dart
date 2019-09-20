@@ -10,16 +10,21 @@ class ComplainListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundImage:
-            NetworkImage('${_model.hostUrl}/${complain.complainImage}'),
-      ),
-      title: Text(complain.category),
-      subtitle: Text(complain.description),
-      trailing: IconButton(
-        onPressed: () {},
-        icon: Icon(Icons.edit),
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/ComplainContent/' + complain.complainId.toString());
+      },
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundImage:
+              NetworkImage('${_model.hostUrl}/${complain.complainImage}'),
+        ),
+        title: Text(complain.category),
+        subtitle: Text(complain.description),
+        trailing: IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.edit),
+        ),
       ),
     );
   }

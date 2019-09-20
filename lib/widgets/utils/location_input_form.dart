@@ -6,16 +6,16 @@ import 'package:itrack24/models/location.dart';
 import 'package:itrack24/scoped-models/main.dart';
 import 'package:location/location.dart' as geoLoc;
 
-class LocationInputWindow extends StatefulWidget {
+class LocationInputFormField extends StatefulWidget {
   final MainModel _model;
 
-  LocationInputWindow(this._model);
+  LocationInputFormField(this._model);
 
   @override
-  _LocationInputWindowState createState() => _LocationInputWindowState();
+  _LocationInputFormFieldState createState() => _LocationInputFormFieldState();
 }
 
-class _LocationInputWindowState extends State<LocationInputWindow> {
+class _LocationInputFormFieldState extends State<LocationInputFormField> {
   Uri mapImageUri;
   Uri geocodeUri;
 

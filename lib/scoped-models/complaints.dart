@@ -9,6 +9,15 @@ import 'package:http/http.dart' as http;
 
 mixin ComplaintsModel on Model, UtilityModel, ImageModel, UserModel {
   List<Complain> _finalComplainList;
+  Complain _selectedComplain;
+
+  Complain get selectedComplain {
+    return _selectedComplain;
+  }
+
+  set selectedComplain(Complain comp) {
+    _selectedComplain = comp;
+  }
 
   List<Complain> get finalComplainList {
     return _finalComplainList;
