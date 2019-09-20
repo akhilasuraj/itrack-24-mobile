@@ -7,7 +7,7 @@ import 'package:itrack24/scoped-models/utility.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
 
-mixin ComplaintsModel on Model, UtilityModel, ImageModel, UserModel{
+mixin ComplaintsModel on Model, UtilityModel, ImageModel, UserModel {
   List<Complain> _finalComplainList;
 
   List<Complain> get finalComplainList {
@@ -46,7 +46,7 @@ mixin ComplaintsModel on Model, UtilityModel, ImageModel, UserModel{
 
   Future<Null> submitComplain(Complain complain) async {
     isLoading = true;
-    await uploadImage('/users/upload-image','compImg');
+    await uploadImage('/users/upload-image', 'compImg');
     final Map<String, dynamic> _complainDetails = {
       'user_id': user.userId,
       'category': complain.category,
@@ -57,6 +57,8 @@ mixin ComplaintsModel on Model, UtilityModel, ImageModel, UserModel{
       'address1': complain.address1,
       'address2': complain.address2,
       'district': complain.district,
+      'date': complain.date,
+      'time': complain.time,
     };
     final http.Response response = await http.post(
       '$hostUrl/users/complain',
@@ -68,6 +70,3 @@ mixin ComplaintsModel on Model, UtilityModel, ImageModel, UserModel{
     print(responseData);
   }
 }
-
-
-

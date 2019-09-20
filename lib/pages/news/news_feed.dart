@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:itrack24/pages/news/news_card.dart';
+import 'package:itrack24/widgets/news/news_card.dart';
 import 'package:itrack24/scoped-models/main.dart';
 import 'package:itrack24/widgets/ui_elements/default_bottom_navbar.dart';
 import 'package:itrack24/widgets/ui_elements/default_side_drawer.dart';

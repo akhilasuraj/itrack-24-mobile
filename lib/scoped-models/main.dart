@@ -1,4 +1,5 @@
 import 'package:itrack24/scoped-models/complaints.dart';
+import 'package:itrack24/scoped-models/date_time.dart';
 import 'package:itrack24/scoped-models/image.dart';
 import 'package:itrack24/scoped-models/location.dart';
 import 'package:itrack24/scoped-models/user.dart';
@@ -13,4 +14,5 @@ class MainModel extends Model
         UserModel,
         ComplaintsModel,
         NewsModel,
-        LocationModel {}
+        LocationModel,
+        DateTimeModal {}

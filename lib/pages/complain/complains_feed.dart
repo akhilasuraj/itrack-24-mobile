@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:itrack24/pages/complain/complain_sort_buttons.dart';
-import 'package:itrack24/pages/complain/complain_list_tile.dart';
+import 'package:itrack24/widgets/complains/complain_sort_buttons.dart';
+import 'package:itrack24/widgets/complains/complain_list_tile.dart';
 import 'package:itrack24/scoped-models/main.dart';
 import 'package:itrack24/widgets/ui_elements/default_side_drawer.dart';
 import 'package:scoped_model/scoped_model.dart';

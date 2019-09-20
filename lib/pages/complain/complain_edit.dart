@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itrack24/models/complain.dart';
-import 'package:itrack24/pages/complain/image_upload.dart';
-import 'package:itrack24/pages/complain/location_input.dart';
+import 'package:itrack24/widgets/complains/image_upload.dart';
+import 'package:itrack24/widgets/complains/location_input.dart';
 import 'package:itrack24/scoped-models/main.dart';
 import 'package:itrack24/widgets/ui_elements/date_time.dart';
 import 'package:itrack24/widgets/ui_elements/default_bottom_navbar.dart';
@@ -418,7 +418,7 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
               SizedBox(
                 height: 10.0,
               ),
-              DateTimePicker(),
+              DateTimePicker(widget._model),
               SizedBox(
                 height: 10.0,
               ),
@@ -495,8 +495,8 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
               description: _descriptionTextController.text,
               longitude:_locationMode == LocationMode.Map ? widget._model.currentLocation.lng : null,
               latitude: _locationMode == LocationMode.Map ? widget._model.currentLocation.lat : null,
-              time: null,
-              date: null,
+              time: widget._model.time,
+              date: widget._model.date,
               district: _districtTextController.text,
               address2: _address2TextController.text,
               complainImage: null,
@@ -517,6 +517,8 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
   @override
   void dispose() {
     widget._model.pickedImage = null;
+    widget._model.date = null;
+    widget._model.time = null;
     super.dispose();
   }
 }

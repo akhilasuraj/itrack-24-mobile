@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:itrack24/scoped-models/main.dart';
 
 class DateTimePicker extends StatefulWidget {
+  final MainModel _model;
+
+  DateTimePicker(this._model);
+
   @override
   _DateTimePickerState createState() => _DateTimePickerState();
 }
 
 class _DateTimePickerState extends State<DateTimePicker> {
-  String _date = "Not set";
-  String _time = "Not set";
-
   @override
   void initState() {
     super.initState();
     DateTime now = DateTime.now();
-    _date = '${now.year} - ${now.month} - ${now.day}';
-    _time = '${now.hour} : ${now.minute} : ${now.second}';
+    widget._model.date = '${now.year}-${now.month}-${now.day}';
+    widget._model.time = '${now.hour}:${now.minute}:${now.second}';
   }
 
   @override
@@ -40,7 +42,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
                     minTime: DateTime(2000, 1, 1),
                     maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
                   print('confirm $date');
-                  _date = '${date.year} - ${date.month} - ${date.day}';
+                  widget._model.date = '${date.year}-${date.month}-${date.day}';
                   setState(() {});
                 }, currentTime: DateTime.now(), locale: LocaleType.en);
               },
@@ -61,7 +63,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
                                 color: Colors.black,
                               ),
                               Text(
-                                " $_date",
+                                " ${widget._model.date}",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
@@ -98,7 +100,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
                     ),
                     showTitleActions: true, onConfirm: (time) {
                   print('confirm $time');
-                  _time = '${time.hour} : ${time.minute} : ${time.second}';
+                  widget._model.time = '${time.hour}:${time.minute}:${time.second}';
                   setState(() {});
                 }, currentTime: DateTime.now(), locale: LocaleType.en);
                 setState(() {});
@@ -120,7 +122,7 @@ class _DateTimePickerState extends State<DateTimePicker> {
                                 color: Colors.black,
                               ),
                               Text(
-                                " $_time",
+                                " ${widget._model.time}",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,

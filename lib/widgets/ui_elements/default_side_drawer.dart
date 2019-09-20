@@ -38,7 +38,7 @@ class DefaultSideDrawer extends StatelessWidget {
                       title: Text('News Feed'),
                       leading: Icon(Icons.chat),
                       onTap: () {
-                        Navigator.pop(context);
+                     //   Navigator.popUntil(context, ModalRoute.withName('/newsFeed'));
                         Navigator.pushReplacementNamed(context, '/newsFeed');
                       },
                     ),
@@ -46,9 +46,7 @@ class DefaultSideDrawer extends StatelessWidget {
                       title: Text('Complains'),
                       leading: Icon(Icons.hourglass_empty),
                       onTap: () {
-                        Navigator.pop(context);
-//                        Navigator.popUntil(
-//                            context, ModalRoute.withName('/newsFeed'));
+                      //  Navigator.of(context).pushNamedAndRemoveUntil('/complaints', ModalRoute.withName('/newsFeed'));
                         Navigator.pushNamed(context, '/complaints');
                       },
                     ),
@@ -57,9 +55,7 @@ class DefaultSideDrawer extends StatelessWidget {
                       title: Text('Settings'),
                       leading: Icon(Icons.settings),
                       onTap: () {
-                        Navigator.pop(context);
-//                        Navigator.popUntil(
-//                            context, ModalRoute.withName('/newsFeed'));
+                        //Navigator.of(context).pushNamedAndRemoveUntil('/SettingsMainPage', ModalRoute.withName('/newsFeed'));
                         Navigator.pushNamed(context, '/SettingsMainPage');
                       },
                     ),
@@ -67,9 +63,7 @@ class DefaultSideDrawer extends StatelessWidget {
                       title: Text('Contact us'),
                       leading: Icon(Icons.call),
                       onTap: () {
-                        Navigator.pop(context);
-//                        Navigator.popUntil(
-//                            context, ModalRoute.withName('/newsFeed'));
+                        //Navigator.of(context).pushNamedAndRemoveUntil('/ContactPage', ModalRoute.withName('/newsFeed'));
                         Navigator.pushNamed(context, '/ContactPage');
                       },
                     ),
