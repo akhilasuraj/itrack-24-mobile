@@ -89,9 +89,8 @@ class _MyAppState extends State<MyApp> {
           if (pathElements[1] == 'ComplainContent') {
             final int compId = int.parse(pathElements[2]);
             return MaterialPageRoute(
-              builder: (BuildContext context) => _isAuthenticated
-                  ? ComplainContentPage(compId, _model)
-                  : AuthPage(),
+              builder: (BuildContext context) =>
+                  _isAuthenticated ? ComplainContentPage(compId,_model) : AuthPage(),
             );
           }
           return null;

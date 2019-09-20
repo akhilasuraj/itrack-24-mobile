@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:itrack24/models/complain.dart';
 import 'package:itrack24/scoped-models/main.dart';
+import 'package:itrack24/widgets/utils/map_image.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ComplainContentPage extends StatefulWidget {
-  final MainModel _model;
   final int complainId;
+  final MainModel _model;
 
-  ComplainContentPage(this.complainId, this._model);
+  ComplainContentPage(
+    this.complainId,
+    this._model,
+  );
 
   @override
   _ComplainContentPageState createState() => _ComplainContentPageState();
 }
 
 class _ComplainContentPageState extends State<ComplainContentPage> {
-
   Widget _buildComplainContent() {
     return ScopedModelDescendant(
       builder: (BuildContext context, Widget child, MainModel model) {
@@ -98,7 +101,31 @@ class _ComplainContentPageState extends State<ComplainContentPage> {
                       fontSize: 22.0, height: 1.3, fontWeight: FontWeight.w300),
                   textAlign: TextAlign.center,
                 ),
+                SizedBox(
+                  height: 15.0,
+                ),
+                MapImageWindow(widget._model, model.selectedComplain.latitude,
+                    model.selectedComplain.longitude),
+
               ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildFab() {
+    return ScopedModelDescendant(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return Container(
+          child: FloatingActionButton(
+            backgroundColor: Colors.black87,
+            onPressed: () {
+              Navigator.pushNamed(context, '/ComplainEditPage');
+            },
+            child: Icon(
+              Icons.edit,
             ),
           ),
         );
@@ -109,10 +136,9 @@ class _ComplainContentPageState extends State<ComplainContentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    //  drawer: DefaultSideDrawer(),
+      //  drawer: DefaultSideDrawer(),
       body: _buildComplainContent(),
-     // floatingActionButton: _buildFab(),
+      floatingActionButton: _buildFab(),
     );
   }
-
 }
