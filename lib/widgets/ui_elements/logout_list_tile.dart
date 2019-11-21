@@ -13,7 +13,8 @@ class LogoutListTile extends StatelessWidget {
           title: Text('Logout'),
           onTap: () {
             model.logout();
-            Navigator.of(context).pushReplacementNamed('/');
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
           },
         );
       },

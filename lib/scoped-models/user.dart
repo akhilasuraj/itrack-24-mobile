@@ -12,6 +12,7 @@ import './utility.dart';
 
 mixin UserModel on Model, UtilityModel {
   User _authenticatedUser;
+  String _profPic;
 
   User get user {
     return _authenticatedUser;
@@ -67,11 +68,16 @@ mixin UserModel on Model, UtilityModel {
       prefs.setInt('userId', responseData['userId']);
       prefs.setString('token', responseData['token']);
       prefs.setString('email', formData['email']);
-    } else if (responseData['error'] == 'INVALID_PASSWORD') {
+    } else if (responseData['message'] ==
+        'Verification link has been sent to your email') {
+      message =
+          'Verification link has been sent to your email ${formData['email']}';
+    } else if (responseData['message'] == 'Incorrect password') {
       message = 'Invalid password';
-    } else if (responseData['error'] == 'USER_DOES_NOT_EXIST') {
+    } else if (responseData['message'] == 'Incorrect email') {
       message = 'User does not exist';
-    } else if (responseData['error'] == 'USER_ALREADY_EXISTS') {
+    } else if (responseData['message'] ==
+        'this email registered already.Try another email') {
       message = 'User already exist';
     }
     isLoading = false;
@@ -93,6 +99,26 @@ mixin UserModel on Model, UtilityModel {
       _userSubject.add(true);
       notifyListeners();
     }
+  }
+
+  Future<bool> getProfPic(int userId) async {
+    isLoading = true;
+    try {
+      final http.Response response = await http.post(
+        '$hostUrl/users/viewproimage',
+        body: json.encode({'id': userId}),
+        headers: {'content-type': 'application/json'},
+      );
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      print(responseData);
+      _profPic = responseData['pic_name'];
+    } catch (e) {
+      print(e);
+      isLoading = false;
+      return false;
+    }
+    isLoading = false;
+    return true;
   }
 
   void logout() async {

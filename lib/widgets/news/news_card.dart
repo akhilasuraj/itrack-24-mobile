@@ -31,11 +31,13 @@ class NewsCard extends StatelessWidget {
                 child: ScopedModelDescendant(
                   builder:
                       (BuildContext context, Widget child, MainModel model) {
-                    return FadeInImage(
-                      image: NetworkImage('${model.hostUrl}/${this.news.imageUrl}'),
-                      fit: BoxFit.cover,
-                      alignment: FractionalOffset.center,
-                      placeholder: AssetImage('assets/android.jpg'),
+                    return Hero(tag: '${this.news.newsId}',
+                      child: FadeInImage(
+                        image: NetworkImage('${model.hostUrl}/${this.news.imageUrl}'),
+                        fit: BoxFit.cover,
+                        alignment: FractionalOffset.center,
+                        placeholder: AssetImage('assets/android.jpg'),
+                      ),
                     );
                   },
                 ),

@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:itrack24/models/news.dart';
 import 'package:itrack24/scoped-models/main.dart';
-import 'package:itrack24/widgets/ui_elements/default_bottom_navbar.dart';
-import 'package:itrack24/widgets/ui_elements/default_side_drawer.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class NewsEditPage extends StatefulWidget {
@@ -36,6 +34,7 @@ class _NewsEditPageState extends State<NewsEditPage> {
     return ScopedModelDescendant(
       builder: (BuildContext context, Widget child, MainModel model) {
         return FloatingActionButton(
+          heroTag: 'blackFab',
           onPressed: () async {
             if (!_formKey.currentState.validate() ||
                 model.pickedImage == null) {
@@ -291,11 +290,11 @@ class _NewsEditPageState extends State<NewsEditPage> {
     return Scaffold(
       key: _scaffoldKey,
       extendBody: true,
-      drawer: DefaultSideDrawer(),
+//      drawer: DefaultSideDrawer(widget._model),
       body: _buildNewsSubmitFormField(),
       floatingActionButton: _buildFloatingActionButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      bottomNavigationBar: defaultBottomAppBar(_scaffoldKey),
+//      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+//      bottomNavigationBar: defaultBottomAppBar(_scaffoldKey,context),
     );
   }
 
@@ -309,7 +308,7 @@ class _NewsEditPageState extends State<NewsEditPage> {
   void initState() {
     super.initState();
 
-    if (widget.isEdit) {
+    if (widget.isEdit && widget.editableNews != null) {
       newsTitleController.text = widget.editableNews.newsTitle;
       newsContentController.text = widget.editableNews.newsContent;
     }

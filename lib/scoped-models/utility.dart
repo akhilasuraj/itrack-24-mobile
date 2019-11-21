@@ -1,7 +1,9 @@
 import 'package:scoped_model/scoped_model.dart';
 
 mixin UtilityModel on Model {
-  final String _hostUrl = 'http://192.168.8.8:3000';
+//  final String _hostUrl = 'http://localhost:3000';
+  final String _hostUrl = 'http://192.168.1.30:3000';
+//  final String _hostUrl = 'https://itrack24-backend-heroku.herokuapp.com';
   bool _isEdit;
 
   bool get isEdit {

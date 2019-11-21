@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-Widget defaultBottomAppBar(GlobalKey<ScaffoldState> _scaffoldKey) {
+Widget defaultBottomAppBar(GlobalKey<ScaffoldState> _scaffoldKey,BuildContext context) {
   return BottomAppBar(
-    color: Colors.red[800],
+    color: Colors.teal,
     notchMargin: 7.0,
     // elevation: 20.0,
     shape: CircularNotchedRectangle(),
@@ -16,7 +16,7 @@ Widget defaultBottomAppBar(GlobalKey<ScaffoldState> _scaffoldKey) {
             onPressed: () => _scaffoldKey.currentState.openDrawer(),
             icon: Icon(
               Icons.menu,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
         ],

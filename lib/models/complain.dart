@@ -13,6 +13,14 @@ class Complain {
   final String time;
   final double longitude;
   final double latitude;
+  final bool isViwedByUser;
+  final bool isViwedCompletedByUser;
+  final bool isViwedByAdmin;
+  final bool isAccepted;
+  final bool isRejected;
+  final bool isAssigned;
+  final bool isCompleted;
+  final String reason;
 
   Complain({
     @required this.complainId,
@@ -27,5 +35,13 @@ class Complain {
     @required this.time,
     @required this.latitude,
     @required this.longitude,
+    @required this.isAccepted,
+    @required this.isAssigned,
+    @required this.isCompleted,
+    @required this.isRejected,
+    @required this.isViwedByAdmin,
+    @required this.isViwedByUser,
+    @required this.isViwedCompletedByUser,
+    @required this.reason,
   });
 }

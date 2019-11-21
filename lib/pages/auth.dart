@@ -250,6 +250,9 @@ class _AuthPageState extends State<AuthPage> {
               FlatButton(
                 child: Text('okay'),
                 onPressed: () {
+                  setState(() {
+                    _authMode = AuthMode.Login;
+                  });
                   Navigator.of(context).pop();
                 },
               )

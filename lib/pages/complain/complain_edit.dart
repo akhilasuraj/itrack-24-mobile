@@ -4,8 +4,6 @@ import 'package:itrack24/widgets/complains/image_upload.dart';
 import 'package:itrack24/widgets/utils/location_input_form.dart';
 import 'package:itrack24/scoped-models/main.dart';
 import 'package:itrack24/widgets/ui_elements/date_time.dart';
-import 'package:itrack24/widgets/ui_elements/default_bottom_navbar.dart';
-import 'package:itrack24/widgets/ui_elements/default_side_drawer.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ComplainEditPage extends StatefulWidget {
@@ -35,36 +33,42 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
 
   String _selectedComplainCategory;
   List<String> _complainHeadingList = [
-    'Emergency on street',
-    'Drainage Blocking',
-    'Solid Waste Removal',
-    'Removel of Tree Cutting Debris',
-    'Other',
+    'Electrical',
+    'Environment',
+    'Construction',
+    'Waste',
+    'Drainage',
+    'Mosquito-Spreading',
   ];
   List<List<String>> _complainCategoryList = [
     [
-      'Stret-Signal post',
-      'Street-Pedestrian crossing',
+      'Street-Signal post',
       'Street-lamp',
       'Street-Color light',
-      'Street-Dangerous tree',
-      'Street-Dangerous construction area',
     ],
     [
-      'Drainage Blockage-house',
+      'Tree Cutting Debris-Private',
+      'Tree Cutting Debris-Public premises',
+      'Street-Dangerous tree',
+    ],
+    [
+      'Street-Dangerous construction area',
+      'Street-Pedestrian crossing',
+      'Illegal-Constrction',
+    ],
+    [
+      'Solid waste-Private',
+      'Solid waste-Public premises',
+      'Decaying-Waste Public',
+    ],
+    [
+      'Drainage Blockage-Private',
       'Drainage Blockage-Public building',
       'Drainage Blockage-Road',
     ],
     [
-      'Solid waste-house',
-      'Solid waste-Public premises',
-    ],
-    [
-      'Tree Cutting Debris-house',
-      'Tree Cutting Debris-Public premises',
-    ],
-    [
-      'Mosquito breeding area',
+      'Mosquito breeding area-Public',
+      'Mosquito breeding area-Private',
     ]
   ];
 
@@ -261,47 +265,49 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
     );
   }
 
-  Widget _buildLocationModeButtonRow() {
-    return ClipRRect(
-      borderRadius: BorderRadius.all(
-        Radius.circular(25.0),
-      ),
-      child: Stack(
-        children: <Widget>[
-          AnimatedPositioned(
-            duration: Duration(milliseconds: 300),
-            left: _locationMode == LocationMode.Map ? 0 : MediaQuery.of(context).size.width/2 -25,
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(
-                Radius.circular(25.0),
-              ),
-              child: Container(
-                width: MediaQuery.of(context).size.width / 2+ 15,
-                height: 50,
-                color: Colors.amber,
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(width: 1.0, color: Colors.black),
-              borderRadius: BorderRadius.circular(25.0),
-              color: Colors.transparent,
-            ),
-            height: 50,
-            width: MediaQuery.of(context).size.width,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                _buildLocationModeButton('Map', LocationMode.Map),
-                _buildLocationModeButton('Address', LocationMode.Address),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+//  Widget _buildLocationModeButtonRow() {
+//    return ClipRRect(
+//      borderRadius: BorderRadius.all(
+//        Radius.circular(25.0),
+//      ),
+//      child: Stack(
+//        children: <Widget>[
+//          AnimatedPositioned(
+//            duration: Duration(milliseconds: 300),
+//            left: _locationMode == LocationMode.Map
+//                ? 0
+//                : MediaQuery.of(context).size.width / 2 - 25,
+//            child: ClipRRect(
+//              borderRadius: BorderRadius.all(
+//                Radius.circular(25.0),
+//              ),
+//              child: Container(
+//                width: MediaQuery.of(context).size.width / 2 + 15,
+//                height: 50,
+//                color: Colors.amber,
+//              ),
+//            ),
+//          ),
+//          Container(
+//            decoration: BoxDecoration(
+//              border: Border.all(width: 1.0, color: Colors.black),
+//              borderRadius: BorderRadius.circular(25.0),
+//              color: Colors.transparent,
+//            ),
+//            height: 50,
+//            width: MediaQuery.of(context).size.width,
+//            child: Row(
+//              mainAxisAlignment: MainAxisAlignment.center,
+//              children: <Widget>[
+//                _buildLocationModeButton('Map', LocationMode.Map),
+//                _buildLocationModeButton('Address', LocationMode.Address),
+//              ],
+//            ),
+//          ),
+//        ],
+//      ),
+//    );
+//  }
 
   Widget _buildLocationModeButton(String title, LocationMode mode) {
     return GestureDetector(
@@ -317,7 +323,8 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
         child: Center(
             child: Text(
           title,
-          style: TextStyle(color: _locationMode == mode ? Colors.black : Colors.grey,
+          style: TextStyle(
+              color: _locationMode == mode ? Colors.black : Colors.grey,
               fontSize: _locationMode == mode ? 22.0 : 14.0,
               fontWeight: FontWeight.w700),
         )),
@@ -331,11 +338,11 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
       // backgroundColor: Colors.amber,
       key: _scaffoldKey,
       extendBody: true,
-      drawer: DefaultSideDrawer(),
+//      drawer: DefaultSideDrawer(widget._model),
       body: _buildBody(),
       floatingActionButton: _buildFloatingActionButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      bottomNavigationBar: defaultBottomAppBar(_scaffoldKey),
+//      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+//      bottomNavigationBar: defaultBottomAppBar(_scaffoldKey,context),
     );
   }
 
@@ -345,110 +352,105 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
       padding: EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 10.0),
       child: SingleChildScrollView(
         child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Text(
-                    'Category :',
-                    style:
-                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
-                  ),
-                  Expanded(
-                    child: Container(),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              _buildComplainCategory(),
-              SizedBox(
-                height: 10.0,
-              ),
-              Row(
-                children: <Widget>[
-                  Text(
-                    'Description :',
-                    style:
-                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
-                  ),
-                  Expanded(
-                    child: Container(),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              _buildDescriptionFormField(),
-              SizedBox(
-                height: 10.0,
-              ),
-              Row(
-                children: <Widget>[
-                  Text(
-                    'Image :',
-                    style:
-                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
-                  ),
-                  Expanded(
-                    child: Container(),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              ImageUploadWindow(widget._model),
-              SizedBox(
-                height: 10.0,
-              ),
-              Row(
-                children: <Widget>[
-                  Text(
-                    'Date and Time :',
-                    style:
-                    TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
-                  ),
-                  Expanded(
-                    child: Container(),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              DateTimePicker(widget._model),
-              SizedBox(
-                height: 10.0,
-              ),
-              Row(
-                children: <Widget>[
-                  Text(
-                    'Location :',
-                    style:
-                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
-                  ),
-                  Expanded(
-                    child: Container(),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              _buildLocationModeButtonRow(),
-              SizedBox(
-                height: 10.0,
-              ),
-              _locationMode == LocationMode.Map
-                  ? LocationInputFormField(widget._model)
-                  : _buildAddressInputForm(),
-              SizedBox(
-                height: 50.0,
-              ),
-            ],
-          ),
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text(
+                  'Category :',
+                  style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
+                ),
+                Expanded(
+                  child: Container(),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            _buildComplainCategory(),
+            SizedBox(
+              height: 10.0,
+            ),
+            Row(
+              children: <Widget>[
+                Text(
+                  'Description :',
+                  style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
+                ),
+                Expanded(
+                  child: Container(),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            _buildDescriptionFormField(),
+            SizedBox(
+              height: 10.0,
+            ),
+            Row(
+              children: <Widget>[
+                Text(
+                  'Image :',
+                  style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
+                ),
+                Expanded(
+                  child: Container(),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            ImageUploadWindow(widget._model),
+            SizedBox(
+              height: 10.0,
+            ),
+            Row(
+              children: <Widget>[
+                Text(
+                  'Date and Time :',
+                  style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
+                ),
+                Expanded(
+                  child: Container(),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            DateTimePicker(widget._model),
+            SizedBox(
+              height: 10.0,
+            ),
+            Row(
+              children: <Widget>[
+                Text(
+                  'Location :',
+                  style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w700),
+                ),
+                Expanded(
+                  child: Container(),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+//            _buildLocationModeButtonRow(),
+            SizedBox(
+              height: 10.0,
+            ),
+            _locationMode == LocationMode.Map
+                ? LocationInputFormField(widget._model)
+                : _buildAddressInputForm(),
+            SizedBox(
+              height: 50.0,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -467,55 +469,65 @@ class _ComplainEditPageState extends State<ComplainEditPage> {
   Widget _buildFloatingActionButton() {
     return ScopedModelDescendant(
       builder: (BuildContext context, Widget child, MainModel model) {
-        return FloatingActionButton(
-          onPressed: () async {
-            Scaffold.of(context).hideCurrentSnackBar();
-            if (_descriptionTextController.text.isEmpty ||
-                _descriptionTextController.text == null ||
-                _selectedComplainCategory.isEmpty ||
-                _selectedComplainCategory == null ||
-                widget._model.pickedImage == null) {
-              Scaffold.of(context).showSnackBar(snackBar);
-              return;
-            }
-            if (_locationMode == LocationMode.Address) {
-              if (_address1TextController.text.isEmpty ||
-                  _address1TextController.text == null ||
-                  _address2TextController.text.isEmpty ||
-                  _address2TextController.text == null ||
-                  _districtTextController.text.isEmpty ||
-                  _districtTextController.text == null) {
-                Scaffold.of(context).showSnackBar(snackBar);
-                return;
-              }
-            }
-            Complain generatedComplain = Complain(
-              userId: model.user.userId,
-              category: _selectedComplainCategory,
-              description: _descriptionTextController.text,
-              longitude:_locationMode == LocationMode.Map ? widget._model.currentLocation.lng : null,
-              latitude: _locationMode == LocationMode.Map ? widget._model.currentLocation.lat : null,
-              time: widget._model.time,
-              date: widget._model.date,
-              district: _districtTextController.text,
-              address2: _address2TextController.text,
-              complainImage: null,
-              complainId: null,
-              address1: _address1TextController.text,
-            );
-            await model.submitComplain(generatedComplain);
-            Navigator.pushReplacementNamed(context, '/complaints');
-          },
-          tooltip: 'Submit',
-          backgroundColor: Colors.black87,
-          child: Icon(Icons.check),
-        );
+        return model.isLoading
+            ? CircularProgressIndicator()
+            : FloatingActionButton(
+                heroTag: 'blackFab',
+                onPressed: () async {
+                  Scaffold.of(context).hideCurrentSnackBar();
+                  if (_descriptionTextController.text.isEmpty ||
+                      _descriptionTextController.text == null ||
+                      _selectedComplainCategory.isEmpty ||
+                      _selectedComplainCategory == null ||
+                      widget._model.pickedImage == null) {
+                    Scaffold.of(context).showSnackBar(snackBar);
+                    return;
+                  }
+                  if (_locationMode == LocationMode.Address) {
+                    if (_address1TextController.text.isEmpty ||
+                        _address1TextController.text == null ||
+                        _address2TextController.text.isEmpty ||
+                        _address2TextController.text == null ||
+                        _districtTextController.text.isEmpty ||
+                        _districtTextController.text == null) {
+                      Scaffold.of(context).showSnackBar(snackBar);
+                      return;
+                    }
+                  }
+                  Complain generatedComplain = Complain(
+                    userId: model.user.userId,
+                    category: _selectedComplainCategory,
+                    description: _descriptionTextController.text,
+                    longitude: _locationMode == LocationMode.Map
+                        ? widget._model.currentLocation.lng
+                        : null,
+                    latitude: _locationMode == LocationMode.Map
+                        ? widget._model.currentLocation.lat
+                        : null,
+                    time: widget._model.time,
+                    date: widget._model.date,
+                    district: _districtTextController.text,
+                    address2: _address2TextController.text,
+                    complainImage: null,
+                    complainId: null,
+                    address1: _address1TextController.text,
+                  );
+                  final bool state =
+                      await model.submitComplain(generatedComplain);
+                  print(state);
+                  Navigator.pushReplacementNamed(context, '/complaints');
+                },
+                tooltip: 'Submit',
+                backgroundColor: Colors.black87,
+                child: Icon(Icons.check),
+              );
       },
     );
   }
 
   @override
   void dispose() {
+    widget._model.fetchComplains(widget._model.user.userId);
     widget._model.pickedImage = null;
     widget._model.date = null;
     widget._model.time = null;

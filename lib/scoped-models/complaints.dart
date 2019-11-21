@@ -23,59 +23,95 @@ mixin ComplaintsModel on Model, UtilityModel, ImageModel, UserModel {
     return _finalComplainList;
   }
 
-  Future<Null> fetchComplains(int userId) async {
+  Future<bool> fetchComplains(int userId) async {
     isLoading = true;
-    final http.Response response = await http.post(
-      '$hostUrl/users/mycomplains',
-      body: json.encode({'user_id': userId}),
-      headers: {'content-type': 'application/json'},
-    );
-    final List fetchedComplains = json.decode(response.body);
-    final List<Complain> fetchedComplainsList = [];
-    fetchedComplains.forEach((complain) {
-      Complain fetchedComplainElement = Complain(
-        complainId: complain['id'],
-        userId: complain['user_id'],
-        category: complain['category'],
-        description: complain['description'],
-        complainImage: complain['complainImg'],
-        address1: complain['address1'],
-        address2: complain['address1'],
-        district: complain['district'],
-        date: complain['date'],
-        time: complain['time'],
-        latitude: complain['latitude'],
-        longitude: complain['longitude'],
+    try {
+      final http.Response response = await http.post(
+        '$hostUrl/users/getallcomplains',
+        body: json.encode({'user_id': userId}),
+        headers: {'content-type': 'application/json'},
       );
-      fetchedComplainsList.add(fetchedComplainElement);
-    });
-    _finalComplainList = fetchedComplainsList;
+      final List fetchedComplains = json.decode(response.body);
+      print(fetchedComplains);
+      final List<Complain> fetchedComplainsList = [];
+      fetchedComplains.forEach((complain) {
+        Complain fetchedComplainElement = Complain(
+          complainId: complain['id'],
+          userId: complain['user_id'],
+          category: complain['category'],
+          description: complain['description'],
+          complainImage: complain['complainImg'],
+          address1: complain['address1'],
+          address2: complain['address2'],
+          district: complain['district'],
+          date: complain['date'],
+          time: complain['time'],
+          latitude: complain['latitude'],
+          longitude: complain['longitude'],
+          isAccepted: complain['isAccepted'],
+          isAssigned: complain['isAssigned'],
+          isCompleted: complain['isCompleted'],
+          isRejected: complain['isRejected'],
+          isViwedByAdmin: complain['isViwedByAdmin'],
+          isViwedByUser: complain['isViwedByUser'],
+          isViwedCompletedByUser: complain['isViwedCompletedByUser'],
+          reason: complain['reason'],
+        );
+        fetchedComplainsList.add(fetchedComplainElement);
+      });
+      _finalComplainList = fetchedComplainsList;
+    } catch (e) {
+      isLoading = false;
+      return false;
+    }
     isLoading = false;
+    return true;
   }
 
-  Future<Null> submitComplain(Complain complain) async {
+  Future<bool> submitComplain(Complain complain) async {
     isLoading = true;
-    await uploadImage('/users/upload-image', 'compImg');
-    final Map<String, dynamic> _complainDetails = {
-      'user_id': user.userId,
-      'category': complain.category,
-      'description': complain.description,
-      'longitude': complain.longitude,
-      'latitude': complain.latitude,
-      'complainImg': null,
-      'address1': complain.address1,
-      'address2': complain.address2,
-      'district': complain.district,
-      'date': complain.date,
-      'time': complain.time,
-    };
-    final http.Response response = await http.post(
-      '$hostUrl/users/complain',
-      body: json.encode(_complainDetails),
-      headers: {'content-type': 'application/json'},
-    );
+    try {
+      final Map<String, String> _complainDetails = {
+        'user_id': user.userId.toString(),
+        'category': complain.category,
+        'description': complain.description,
+        'longitude': complain.longitude.toString(),
+        'latitude': complain.latitude.toString(),
+        'address1': complain.address1,
+        'address2': complain.address2,
+        'district': complain.district,
+        'date': complain.date,
+        'time': complain.time,
+      };
+
+      final bool state =
+          await uploadImage('/users/complain', 'compImg', _complainDetails);
+      print(state);
+    } catch (e) {
+      print(e);
+      isLoading = false;
+      return false;
+    }
     isLoading = false;
-    final Map<String, dynamic> responseData = json.decode(response.body);
-    print(responseData);
+    return true;
+  }
+
+  Future<bool> deleteComplain(int complainId) async {
+    isLoading = true;
+    try {
+      final http.Response response = await http.post(
+        '$hostUrl/users/deletecomplains',
+        body: json.encode({'id': complainId}),
+        headers: {'content-type': 'application/json'},
+      );
+      final List responseData = json.decode(response.body);
+      print(responseData);
+    } catch (e) {
+      print(e);
+      isLoading = false;
+      return false;
+    }
+    isLoading = false;
+    return true;
   }
 }

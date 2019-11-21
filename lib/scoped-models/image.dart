@@ -8,29 +8,32 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:http_parser/http_parser.dart';
 
 mixin ImageModel on Model, UtilityModel {
-
   File _pickedImage;
 
-  set pickedImage(File image){
+  set pickedImage(File image) {
     _pickedImage = image;
     notifyListeners();
   }
 
-  File get pickedImage{
+  File get pickedImage {
     return _pickedImage;
   }
 
-  Future<Null> uploadImage(String route, String path) async {
+  Future<bool> uploadImage(
+      String route, String path, Map<String, String> content) async {
     final mimeTypeData = lookupMimeType(_pickedImage.path).split('/');
     final imageUploadRequest =
-    http.MultipartRequest('POST', Uri.parse('$hostUrl$route'));
+        http.MultipartRequest('POST', Uri.parse('$hostUrl$route'));
     final file = await http.MultipartFile.fromPath(path, _pickedImage.path,
         contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+
+    imageUploadRequest.fields.clear();
+    imageUploadRequest.fields.addAll(content);
     imageUploadRequest.files.add(file);
     try {
       final streamedResponse = await imageUploadRequest.send();
       final response = await http.Response.fromStream(streamedResponse);
-      if(response.statusCode != 200 && response.statusCode != 201){
+      if (response.statusCode != 200 && response.statusCode != 201) {
         print('Something went wrong');
         print(json.decode(response.body));
         return null;
@@ -39,7 +42,8 @@ mixin ImageModel on Model, UtilityModel {
       print(responseData);
     } catch (error) {
       print(error);
-      return null;
+      return false;
     }
+    return true;
   }
 }

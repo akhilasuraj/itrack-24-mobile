@@ -10,5 +10,6 @@ mixin LocationModel on Model {
 
   set currentLocation(Location loc) {
     _currentLocation = loc;
+    notifyListeners();
   }
 }

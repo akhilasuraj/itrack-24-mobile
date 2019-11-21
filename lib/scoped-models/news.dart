@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:itrack24/models/news.dart';
 import 'package:itrack24/scoped-models/image.dart';
 import 'package:itrack24/scoped-models/user.dart';
@@ -7,10 +8,9 @@ import 'package:itrack24/scoped-models/utility.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
 
-mixin NewsModel on Model, UtilityModel, UserModel,ImageModel {
+mixin NewsModel on Model, UtilityModel, UserModel, ImageModel {
   List<News> _finalNewsList = List();
   News _selectedNews;
-
 
   News get selectedNews {
     return _selectedNews;
@@ -35,7 +35,7 @@ mixin NewsModel on Model, UtilityModel, UserModel,ImageModel {
         lastName: news['LastName'],
         imageUrl: news['PostImg'],
         newsTitle: news['PostTitle'],
-        newsContent: news['PostText'],
+        newsContent: news['PostContent'],
         date: news['PostDate'],
         time: news['PostTime'],
       );
@@ -50,24 +50,35 @@ mixin NewsModel on Model, UtilityModel, UserModel,ImageModel {
     return _finalNewsList;
   }
 
-  Future<Null> submitNews(String newsTitle, String newsContent) async {
+  Future<Null> deleteNews(BuildContext context) async {
     isLoading = true;
-    await uploadImage('/users/addimage','postImg');
-    final Map<String, dynamic> _newsDetails = {
-      'UserID': user.userId,
+    _finalNewsList.removeWhere((news) => news.newsId == _selectedNews.newsId);
+    final Map<String, int> _newsId = {
+      'postid': _selectedNews.newsId,
+    };
+    // final http.Response response =
+    await http.post(
+      '$hostUrl/users/deletepost',
+      body: json.encode(_newsId),
+      headers: {'content-type': 'application/json'},
+    );
+    selectedNews = null;
+    isLoading = false;
+    // final Map<String, dynamic> responseData = json.decode(response.body);
+    // print(responseData);
+  }
+
+  submitNews(String newsTitle, String newsContent) {
+    isLoading = true;
+
+    final Map<String, String> _newsDetails = {
+      'UserID': user.userId.toString(),
       'FirstName': user.firstName,
       'LastName': user.lastName,
       'PostTitle': newsTitle,
-      'PostText': newsContent,
-      'PostImg': null,
+      'PostContent': newsContent,
     };
-    final http.Response response = await http.post(
-      '$hostUrl/users/addpost',
-      body: json.encode(_newsDetails),
-      headers: {'content-type': 'application/json'},
-    );
+    uploadImage('/users/addpost', 'postImg', _newsDetails);
     isLoading = false;
-    final Map<String, dynamic> responseData = json.decode(response.body);
-    print(responseData);
   }
 }

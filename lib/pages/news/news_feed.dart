@@ -6,9 +6,9 @@ import 'package:itrack24/widgets/ui_elements/default_side_drawer.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class NewsFeedPage extends StatefulWidget {
-  final MainModel model;
+  final MainModel _model;
 
-  NewsFeedPage(this.model);
+  NewsFeedPage(this._model);
 
   @override
   _NewsFeedPageState createState() => _NewsFeedPageState();
@@ -18,7 +18,7 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
   @override
   initState() {
     super.initState();
-    widget.model.fetchNews();
+    widget._model.fetchNews();
   }
 
   Widget _buildNewsFeed(MainModel model) {
@@ -42,6 +42,7 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
 
   Widget _buildFloatingActionButton() {
     return FloatingActionButton(
+      heroTag: 'blackFab',
       onPressed: () {
         Navigator.pushNamed(context, '/NewsEditPage');
       },
@@ -87,19 +88,16 @@ class _NewsFeedPageState extends State<NewsFeedPage> {
       child: Scaffold(
         key: _scaffoldKey,
         extendBody: true,
-        drawer: DefaultSideDrawer(),
+        drawer: DefaultSideDrawer(widget._model),
         body: ScopedModelDescendant<MainModel>(
-          builder: (BuildContext context, Widget child, MainModel model) {
-            return model.isLoading
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : _buildNewsFeed(model);
-          },
-        ),
+            builder: (BuildContext context, Widget child, MainModel model) {
+          return model.isLoading
+              ? Center(child: CircularProgressIndicator())
+              : _buildNewsFeed(model);
+        }),
         floatingActionButton: _buildFloatingActionButton(),
         floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        bottomNavigationBar: defaultBottomAppBar(_scaffoldKey),
+        bottomNavigationBar: defaultBottomAppBar(_scaffoldKey, context),
       ),
     );
   }

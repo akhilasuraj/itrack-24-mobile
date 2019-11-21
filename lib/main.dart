@@ -5,6 +5,7 @@ import 'package:itrack24/pages/contact.dart';
 import 'package:itrack24/pages/news/news_content.dart';
 import 'package:itrack24/pages/news/news_edit.dart';
 import 'package:itrack24/pages/news/news_feed.dart';
+import 'package:itrack24/pages/profile.dart';
 import 'package:itrack24/pages/settings/settings_main.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -48,8 +49,8 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.light,
-          primarySwatch: Colors.red,
-          accentColor: Colors.deepPurple,
+          primarySwatch: Colors.teal,
+          accentColor: Colors.teal,
           buttonColor: Colors.deepOrange,
         ),
         routes: {
@@ -64,11 +65,12 @@ class _MyAppState extends State<MyApp> {
                   editableNews: _model.selectedNews)
               : AuthPage(),
           '/ContactPage': (BuildContext context) =>
-              _isAuthenticated ? ContactPage() : AuthPage(),
+              _isAuthenticated ? ContactPage(_model) : AuthPage(),
           '/SettingsMainPage': (BuildContext context) =>
-              _isAuthenticated ? SettingsMainPage() : AuthPage(),
+              _isAuthenticated ? SettingsMainPage(_model) : AuthPage(),
           '/ComplainEditPage': (BuildContext context) =>
               _isAuthenticated ? ComplainEditPage(_model) : AuthPage(),
+          '/ProfileDetails': (BuildContext context) => ProfileDetails(),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {
@@ -89,8 +91,9 @@ class _MyAppState extends State<MyApp> {
           if (pathElements[1] == 'ComplainContent') {
             final int compId = int.parse(pathElements[2]);
             return MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  _isAuthenticated ? ComplainContentPage(compId,_model) : AuthPage(),
+              builder: (BuildContext context) => _isAuthenticated
+                  ? ComplainContentPage(compId, _model)
+                  : AuthPage(),
             );
           }
           return null;
